@@ -12,7 +12,7 @@ public class BestBuySteps {
     public void i_am_on_the_best_buy_home_page() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("I am on the BestBuy home page");
-        System.out.println("test");
+        System.out.println("test rob branch");
     }
 
     @When("When I close the add modal and search for “macbook pro”")
