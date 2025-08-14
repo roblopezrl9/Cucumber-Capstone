@@ -13,6 +13,7 @@ public class BestBuySteps {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("I am on the BestBuy home page");
         System.out.println("test");
+        System.out.println("test2");
     }
 
     @When("When I close the add modal and search for “macbook pro”")
