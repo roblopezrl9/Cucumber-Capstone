@@ -19,14 +19,14 @@ import java.util.List;
 import static org.junit.Assert.fail;
 
 public class BestBuySteps {
-    WebDriver driver;
+    WebDriver driver = WebDriverManager.getDriver();
 
     @Given("I am on the BestBuy home page")
     public void i_am_on_the_best_buy_home_page() {
         // Write code here that turns the phrase above into concrete actions
-        driver = new ChromeDriver();
+//        driver = new ChromeDriver();
         driver.get("https://www.bestbuy.com/");
-        driver.manage().window().maximize();
+//        driver.manage().window().maximize();
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -66,7 +66,7 @@ public class BestBuySteps {
                 nextPageArrow.click();
             }
         }
-        driver.quit();
+//        driver.quit();
 
     }
 
@@ -95,15 +95,17 @@ public class BestBuySteps {
     public void i_perform_the_above_search() {
         // Write code here that turns the phrase above into concrete actions
 //        first find the macbook
-        driver = new ChromeDriver();
-        driver.get("https://www.bestbuy.com/site/searchpage.jsp?cp=2&id=pcat17071&st=macbook+pro");
-        driver.manage().window().maximize();
+//        driver = new ChromeDriver();
+//        driver.get("https://www.bestbuy.com/site/searchpage.jsp?cp=2&id=pcat17071&st=macbook+pro");
+//        driver.manage().window().maximize();
 
 //        try {
 //            Thread.sleep(10000);
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
+
+        System.out.println("We are in the given i perform above");
 
     }
     @When("I click the “Add to Cart” button next to the laptop")
@@ -138,5 +140,13 @@ public class BestBuySteps {
         Assert.assertTrue(actualText.contains(expectedText), "Cart subtotal does not contain expected text: " + expectedText);
     }
 
+
+//    @When("I click on the “Go to Cart” button")
+//    public void iClickOnTheGoToCartButton() {
+//        System.out.println("Clicking on Go to Cart Button");
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//        WebElement gotoCartButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("c-button")));
+//        gotoCartButton.click();
+//    }
 }
 
