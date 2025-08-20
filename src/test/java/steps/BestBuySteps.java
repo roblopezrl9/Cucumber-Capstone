@@ -3,11 +3,13 @@ package steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.*;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -28,38 +30,39 @@ public class BestBuySteps {
     public void i_am_on_the_best_buy_home_page() {
 
         // Write code here that turns the phrase above into concrete actions
-//        driver = new ChromeDriver();
         driver.get("https://www.bestbuy.com/");
-//        driver.manage().window().maximize();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     @When("When I close the add modal and search for “macbook pro”")
     public void when_i_close_the_add_modal_and_search_for_macbook_pro() {
         // Write code here that turns the phrase above into concrete actions
+
         System.out.println("When I close the add modal and search for “macbook pro”");
-        WebElement inputBar = driver.findElement(By.id("autocomplete-search-bar"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("store-display-name")));
+        WebElement inputBar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("autocomplete-search-bar")));
         inputBar.sendKeys("macbook pro");
         WebElement searchButton = driver.findElement(By.id("autocomplete-search-button"));
         searchButton.click();
+
         // Wait for the search results to load
-        try{
-            Thread.sleep(15000);
-        }catch (Exception e){
-            System.out.println("Error while waiting for search results to load: " + e.getMessage());
-        }
+//        try{
+//            Thread.sleep(15000);
+//        }catch (Exception e){
+//            System.out.println("Error while waiting for search results to load: " + e.getMessage());
+//        }
     }
 
     @Then("one of the laptops listed should be {double} 8GB Memory and 256GB SSD")
     public void one_of_the_laptops_listed_should_be_8gb_memory_and_256gb_ssd(Double double1) {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("one of the laptops listed should be {double}” 8GB Memory and 256GB SSD");
-        WebElement nextPageArrow = driver.findElement(By.className("pagination-arrow"));
 
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//        wait.until(ExpectedConditions.visibilityOfAllElements());
+        WebElement nextPageArrow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("pagination-arrow")));
+//        WebElement nextPageArrow = driver.findElement(By.className("pagination-arrow"));
         boolean isLaptop = true;
         while (true){
             if (lookingForLaptop(nextPageArrow)){
@@ -67,10 +70,17 @@ public class BestBuySteps {
                 break;
             }
             else{
-                nextPageArrow.click();
+                try{
+//                    WebElement nextArrow = driver.findElement(By.className("pagination-arrow"));
+                    nextPageArrow.click();
+                }
+                catch (StaleElementReferenceException e){
+                    System.out.println("Stale element found");
+                    driver.findElement(By.className("pagination-arrow")).click();
+                }
+
             }
         }
-//        driver.quit();
 
     }
 
@@ -79,7 +89,7 @@ public class BestBuySteps {
                 .scrollToElement(iframe)
                 .perform();
         try {
-            Thread.sleep(10000);
+            Thread.sleep(9000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -89,26 +99,16 @@ public class BestBuySteps {
             if (laptopText.contains("8GB Memory") && laptopText.contains("256GB SSD") && laptopText.contains("13.3\"")) {
                 System.out.println("Found a 13.3\" laptop with 8GB Memory and 256GB SSD: " + laptopText);
                 return true;
-            } else {
-                System.out.println("Laptop does not match the criteria: " + laptopText);
             }
+           /* else {
+                System.out.println("Laptop does not match the criteria: " + laptopText);
+            }*/
         }
         return false;
     }
     @Given("I perform the above search")
     public void i_perform_the_above_search() {
         // Write code here that turns the phrase above into concrete actions
-//        first find the macbook
-//        driver = new ChromeDriver();
-//        driver.get("https://www.bestbuy.com/site/searchpage.jsp?cp=2&id=pcat17071&st=macbook+pro");
-//        driver.manage().window().maximize();
-
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-
         System.out.println("We are in the given i perform above");
 
     }
@@ -147,14 +147,14 @@ public class BestBuySteps {
     @Given("I am on the Best Buy modal page")
     public void i_am_on_the_best_buy_modal_page() {
         // Write code here that turns the phrase above into concrete actions
-        try{
-            driver = new ChromeDriver();
-            driver.getCurrentUrl();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+//        try{
+//            driver = new ChromeDriver();
+//            driver.getCurrentUrl();
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+        System.out.println("I am in the Best Buy Modal page");
     }
 
     @When("I click on go to cart")
@@ -205,12 +205,12 @@ public class BestBuySteps {
                     ExpectedConditions.elementToBeClickable(By.cssSelector("span.cart-label"))
             );
             cart.click();
-            Thread.sleep(5000);
+//            Thread.sleep(5000);
             WebElement removeButton = wait.until(
                     ExpectedConditions.elementToBeClickable(By.cssSelector("button.cart-item__remove"))
             );
             removeButton.click();
-            Thread.sleep(5000);
+//            Thread.sleep(5000);
         } catch (Exception e) {
             throw new RuntimeException("Cart is not clickable: " + e.getMessage());
         }
@@ -235,15 +235,5 @@ public class BestBuySteps {
         org.junit.Assert.assertEquals(expectedMessage, actualMessage);
         driver.quit();
     }
-
-
-//    @Then("I should see the account created successfully message")
-//    public void i_should_see_the_account_created_successfully_message() {
-//        String expectedMessage = "Account created successfully";
-//        String actualMessage = driver.findElement(By.id("success-message")).getText();
-//        Assert.assertEquals(actualMessage, expectedMessage, "Account creation message does not match expected.");
-//
-//
-//    }
 }
 
