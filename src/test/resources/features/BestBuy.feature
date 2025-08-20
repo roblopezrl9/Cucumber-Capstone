@@ -1,6 +1,12 @@
 Feature: Searching on BestBuy
-@P21
-  Scenario: searching for a product
-    Given I am on the BestBuy home page
-    When When I close the add modal and search for “macbook pro”
-    Then one of the laptops listed should be 13.3 8GB Memory and 256GB SSD
+
+
+
+Scenario: Creating a new user
+  Given  I am on the BestBuy home page
+  Then I click on Account button
+  And  I see the panel with Create account button
+  When I click on the Create Account button
+  Then I should be navigated to Create Account page
+  And I can enter all of my account information
+
