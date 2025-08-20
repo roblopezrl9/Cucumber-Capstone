@@ -10,7 +10,6 @@ Feature: Searching on BestBuy
     Given I perform the above search
     When I click the “Add to Cart” button next to the laptop
     Then I should see a modal window with the cart subtotal
-#    When I click on the “Go to Cart” button
 
 
     @T2
@@ -24,4 +23,12 @@ Feature: Searching on BestBuy
     Given I am on the Best Buy Cart page
     When I remove an item from the cart
     Then I verify that the item is removed from the cart
+    
+  Scenario: Creating a new user
+    Given  I am on the BestBuy home page
+    Then I click on Account button
+    And  I see the panel with Create account button
+    When I click on the Create Account button
+    Then I should be navigated to Create Account page
+    And I can enter all of my account information
 

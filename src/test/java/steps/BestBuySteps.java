@@ -4,6 +4,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,11 +20,13 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
+
 public class BestBuySteps {
     WebDriver driver = WebDriverManager.getDriver();
-
+  
     @Given("I am on the BestBuy home page")
     public void i_am_on_the_best_buy_home_page() {
+
         // Write code here that turns the phrase above into concrete actions
 //        driver = new ChromeDriver();
         driver.get("https://www.bestbuy.com/");
@@ -232,5 +235,15 @@ public class BestBuySteps {
         org.junit.Assert.assertEquals(expectedMessage, actualMessage);
         driver.quit();
     }
+
+
+//    @Then("I should see the account created successfully message")
+//    public void i_should_see_the_account_created_successfully_message() {
+//        String expectedMessage = "Account created successfully";
+//        String actualMessage = driver.findElement(By.id("success-message")).getText();
+//        Assert.assertEquals(actualMessage, expectedMessage, "Account creation message does not match expected.");
+//
+//
+//    }
 }
 
