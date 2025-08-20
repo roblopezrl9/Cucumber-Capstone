@@ -10,9 +10,10 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features",
         glue = "steps",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
-        tags = "@L1",
+//        tags = "@T1",
         monochrome = true
         //tags = "@P21" // Uncomment to run specific tags
+        //tags = "@L1" //Login Functionality
 )
 public class TestRunner {
 
