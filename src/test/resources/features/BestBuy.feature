@@ -10,7 +10,7 @@ Feature: Searching on BestBuy
     Given I perform the above search
     When I click the “Add to Cart” button next to the laptop
     Then I should see a modal window with the cart subtotal
-
+    
     @T2
   Scenario: checking product is in the cart page
     Given I am on the Best Buy modal page
@@ -22,4 +22,5 @@ Feature: Searching on BestBuy
     Given I am on the Best Buy Cart page
     When I remove an item from the cart
     Then I verify that the item is removed from the cart
+    
 

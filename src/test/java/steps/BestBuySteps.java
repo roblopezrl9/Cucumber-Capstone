@@ -4,6 +4,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,11 +22,13 @@ import java.util.List;
 
 import static org.junit.Assert.fail;
 
+
 public class BestBuySteps {
     WebDriver driver = WebDriverManager.getDriver();
-
+  
     @Given("I am on the BestBuy home page")
     public void i_am_on_the_best_buy_home_page() {
+
         // Write code here that turns the phrase above into concrete actions
         driver.get("https://www.bestbuy.com/");
 

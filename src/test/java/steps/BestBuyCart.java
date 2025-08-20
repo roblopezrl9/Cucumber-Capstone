@@ -101,3 +101,9 @@
 //
 //
 //}
+//    @Then("I navigate to the laptop and the order summary")
+//    public void i_navigate_to_the_laptop_and_the_order_summary() {
+//        String expUrl = "https://www.bestbuy.com/cart";
+//        String actUrl = driver.getCurrentUrl();
+//        Assert.assertEquals(expUrl, actUrl);
+//   }

@@ -12,6 +12,9 @@ import org.junit.runner.RunWith;
         plugin = {"pretty", "html:target/cucumber-reports.html"},
 //        tags = "@T1",
         monochrome = true
+        //tags = "@P21" // Uncomment to run specific tags
 )
 public class TestRunner {
+
+
 }
