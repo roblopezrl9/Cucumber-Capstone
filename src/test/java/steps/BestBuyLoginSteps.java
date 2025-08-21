@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,14 +19,14 @@ import java.time.Duration;
 
 public class BestBuyLoginSteps {
 
-    WebDriver driver;
+    WebDriver driver=WebDriverManager.getDriver();
 
     @BeforeTest
     @Given("start with the BestBuy home page")
     public void startWithTheBestBuyHomePage() {
-        driver = new ChromeDriver();
+        //driver = new ChromeDriver();
         driver.get("https://www.bestbuy.com/ ");
-        driver.manage().window().maximize();
+        //driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
     }
 
@@ -113,7 +114,30 @@ public class BestBuyLoginSteps {
         System.out.println("Successfully navigated to my account page: " + actualUrl);
     }
 
+    @Given("I am on the BestBuy Create Account page")
+    public void i_am_on_the_best_buy_create_account_page() {
+        //driver= new ChromeDriver();
+        driver.get("https://www.bestbuy.com/identity/newAccount?token=tid%3A60255b47-7eb0-11f0-bc6f-12e22549baeb");
+       // driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    }
+    @When("I enter {string} it should check for {string}")
+    public void i_enter_it_should_check_for(String string, String invalid) throws InterruptedException {
+       WebElement firstName= driver.findElement(By.id("firstName"));
+       firstName.sendKeys(string);
+       firstName.sendKeys(Keys.ENTER);
+        if(invalid.equals("true")){
 
+            Assert.assertTrue(driver.findElement(By.xpath("//p[text()='Too many numeric characters.']")).isDisplayed());
+    }
+        else
+        {
+            Assert.assertTrue(driver.findElement(By.xpath("//p[text()='Please enter your first name.']")).isDisplayed()) ;
+        }
+
+        //clear the input field for the next test
+        firstName.clear();
+    }
 
 
     @AfterTest
