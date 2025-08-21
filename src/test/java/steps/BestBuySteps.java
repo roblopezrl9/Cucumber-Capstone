@@ -31,6 +31,19 @@ public class BestBuySteps {
 
         // Write code here that turns the phrase above into concrete actions
         driver.get("https://www.bestbuy.com/");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            WebElement usaFlag = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("us-link")));
+            // If the page contains flags, click on the USA flag
+            // If the page does not contain flags, this step will be skipped
+            if(usaFlag.isDisplayed()){
+                usaFlag.click();
+                System.out.println("USA flag clicked successfully.");
+            }
+        } catch (TimeoutException e) {
+            System.out.println("USA flag not found, continuing without clicking.");
+        }
+
 
     }
 
@@ -58,54 +71,16 @@ public class BestBuySteps {
     public void one_of_the_laptops_listed_should_be_8gb_memory_and_256gb_ssd(Double double1) {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("one of the laptops listed should be {double}” 8GB Memory and 256GB SSD");
-
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        wait.until(ExpectedConditions.visibilityOfAllElements());
-        WebElement nextPageArrow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("pagination-arrow")));
-//        WebElement nextPageArrow = driver.findElement(By.className("pagination-arrow"));
-        boolean isLaptop = true;
-        while (true){
-            if (lookingForLaptop(nextPageArrow)){
-                isLaptop = false;
-                break;
-            }
-            else{
-                try{
-//                    WebElement nextArrow = driver.findElement(By.className("pagination-arrow"));
-                    nextPageArrow.click();
-                }
-                catch (StaleElementReferenceException e){
-                    System.out.println("Stale element found");
-                    driver.findElement(By.className("pagination-arrow")).click();
-                }
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        Assert.assertTrue(macBook.getText().contains("16"));
+        Assert.assertTrue(macBook.getText().contains("24GB Memory"));
+        Assert.assertTrue(macBook.getText().contains("512GB SSD"));
 
-            }
-        }
+//        System.out.println("Found a 14 inch mac with 24 GB Memory and 512GB SSD: " + macBook.findElement(By.className("product-title")).getText());
 
     }
 
-    public boolean lookingForLaptop(WebElement iframe){
-        new Actions(driver)
-                .scrollToElement(iframe)
-                .perform();
-        try {
-            Thread.sleep(9000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        List<WebElement> laptopList = driver.findElements(By.className("product-title"));
-        for (WebElement laptop : laptopList){
-            String laptopText = laptop.getText();
-            if (laptopText.contains("8GB Memory") && laptopText.contains("256GB SSD") && laptopText.contains("13.3\"")) {
-                System.out.println("Found a 13.3\" laptop with 8GB Memory and 256GB SSD: " + laptopText);
-                return true;
-            }
-           /* else {
-                System.out.println("Laptop does not match the criteria: " + laptopText);
-            }*/
-        }
-        return false;
-    }
     @Given("I perform the above search")
     public void i_perform_the_above_search() {
         // Write code here that turns the phrase above into concrete actions
@@ -115,22 +90,11 @@ public class BestBuySteps {
     @When("I click the “Add to Cart” button next to the laptop")
     public void i_click_the_add_to_cart_button_next_to_the_laptop() {
         // Write code here that turns the phrase above into concrete actions
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement paginationArrow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("current-page")));
-        new Actions(driver).scrollToElement(paginationArrow).perform();
-        paginationArrow.click();
-
-        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'sku-block'][contains(., '8GB Memory') and contains(.,'13.3\"') and contains(.,'256GB SSD') and .//button[contains(., 'Add to cart')]]"))));
-        WebElement addCartButton = macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"));
-        js.executeScript("arguments[0].scrollIntoView(true);", addCartButton);
-
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(addCartButton)).click();
-        }catch (Exception e){
-            System.out.println("Click intercepted — using JS click as fallback.");
-            js.executeScript("arguments[0].click();", addCartButton);
-        }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        System.out.println(macBook.getText());
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"))));
+        button.click();
     }
     @Then("I should see a modal window with the cart subtotal")
     public void i_should_see_a_modal_window_with_the_cart_subtotal() {
@@ -147,13 +111,6 @@ public class BestBuySteps {
     @Given("I am on the Best Buy modal page")
     public void i_am_on_the_best_buy_modal_page() {
         // Write code here that turns the phrase above into concrete actions
-//        try{
-//            driver = new ChromeDriver();
-//            driver.getCurrentUrl();
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
         System.out.println("I am in the Best Buy Modal page");
     }
 
@@ -184,12 +141,12 @@ public class BestBuySteps {
     // THE REMOVE ITEM FROM CART
     @Given("I am on the Best Buy Cart page")
     public void i_am_on_the_best_buy_cart_page() {
-        try{
-            driver.get("https://www.bestbuy.com/cart");
-            Thread.sleep(5000);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        try{
+////            driver.get("https://www.bestbuy.com/cart");
+//            Thread.sleep(5000);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     @When("I remove an item from the cart")

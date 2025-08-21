@@ -5,7 +5,7 @@ Feature: Searching on BestBuy
     When When I close the add modal and search for “macbook pro”
     Then one of the laptops listed should be 13.3 8GB Memory and 256GB SSD
 
-    @T2
+    @T1
   Scenario: adding product to cart
     Given I perform the above search
     When I click the “Add to Cart” button next to the laptop
