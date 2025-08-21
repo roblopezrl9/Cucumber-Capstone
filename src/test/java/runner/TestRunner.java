@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 //        tags = "@T1",
         monochrome = true
         //tags = "@P21" // Uncomment to run specific tags
-        //tags = "@L1" //Login Functionality
+//        tags = "@L1" //Login Functionality
 )
 public class TestRunner {
 
