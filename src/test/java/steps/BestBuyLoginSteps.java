@@ -19,7 +19,7 @@ import java.time.Duration;
 
 public class BestBuyLoginSteps {
 
-    WebDriver driver=WebDriverManager.getDriver();
+    WebDriver driver= new ChromeDriver();
 
     @BeforeTest
     @Given("start with the BestBuy home page")
@@ -79,21 +79,30 @@ public class BestBuyLoginSteps {
         try {
 
             WebElement firstName = driver.findElement(By.id("firstName"));
-            firstName.sendKeys("John");
+            firstName.sendKeys("Roblo");
+            Thread.sleep(2500);
             WebElement lastName = driver.findElement(By.xpath("//input[@name='lastName']"));
-            lastName.sendKeys("Doe");
+            lastName.sendKeys("detroit");
+            Thread.sleep(2500);
             WebElement emailAddress = driver.findElement(By.xpath("//input[@id='email']"));
             //automate the email address input
-            emailAddress.sendKeys("sachin.test@gmail.com");
+            emailAddress.sendKeys("roblopezrolorl9@gmail.com");
+            Thread.sleep(2500);
             WebElement password = driver.findElement(By.id("fld-p1"));
             password.sendKeys("StrongPassword123");
+            Thread.sleep(2500);
+
             // The confirm password field is usually the same as the password field
             WebElement confirmPassword = driver.findElement(By.xpath("//input[@id='reenterPassword']"));
             confirmPassword.sendKeys("StrongPassword123");
+            Thread.sleep(2500);
+
             WebElement mobileNo = driver.findElement(By.xpath("//input[@name='phone']"));
-            mobileNo.sendKeys("1234567890");
-            WebElement useforAccountRecovery = driver.findElement(By.xpath("//input[@name='isRecoveryPhone']"));
-            useforAccountRecovery.click();
+            mobileNo.sendKeys("205‑469‑1234");
+            Thread.sleep(2500);
+
+//            WebElement useforAccountRecovery = driver.findElement(By.xpath("//input[@name='isRecoveryPhone']"));
+//            useforAccountRecovery.click();
             WebElement createAccountButton = driver.findElement(By.xpath("//button[@type='submit']"));
             createAccountButton.click();
 

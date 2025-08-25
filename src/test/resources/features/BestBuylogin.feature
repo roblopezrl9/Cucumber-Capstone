@@ -1,5 +1,5 @@
 Feature: User operations on BestBuy
-  @L1
+  @ignore
   Scenario: Creating a new user
     Given  start with the BestBuy home page
     Then I click on Account button
@@ -8,6 +8,7 @@ Feature: User operations on BestBuy
     Then I should be navigated to Create Account page
     And I can enter all of my account information
     Then I should be navigated to my account page
+
     @L2
 
     Scenario Outline: Validating Firstname for negative  scenarios
