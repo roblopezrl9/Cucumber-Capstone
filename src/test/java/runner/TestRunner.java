@@ -11,11 +11,14 @@ import org.junit.runner.RunWith;
         glue = "steps",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
 //        tags = "@T1",
-        monochrome = true
+        monochrome = true,
         //tags = "@P21" // Uncomment to run specific tags
         //tags = "@L1" //Login Functionality
-         //tags ="@L2" //Login Functionality with negative tests
+
         //tags = "@P22" //Product Search Function
+        tags="@L3" //Login with Data-Driven
+        //tags="@L1"
+
 )
 public class TestRunner {
 
