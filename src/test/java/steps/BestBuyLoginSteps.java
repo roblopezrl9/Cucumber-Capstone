@@ -1,64 +1,90 @@
 package steps;
 
-import io.cucumber.java.PendingException;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.junit.After;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-
-import java.io.IOException;
-import java.io.PrintStream;
 import java.time.Duration;
+import java.util.List;
 
 public class BestBuyLoginSteps {
 
     WebDriver driver=WebDriverManager.getDriver();
+    // Common selectors for OneTrust + fallbacks
+    private final By cookieBanner = By.cssSelector(
+            "#onetrust-banner-sdk, [id*='onetrust'], [class*='onetrust'], [aria-label*='cookie' i]"
+    );
+    private final By acceptButton = By.cssSelector(
+            "#onetrust-accept-btn-handler, button#onetrust-accept-btn-handler, " +
+                    "button[aria-label*='Accept' i], button[aria-label*='Allow all' i]"
+    );
 
-    @BeforeTest
+   @Before
     @Given("start with the BestBuy home page")
-    public void startWithTheBestBuyHomePage() {
-        //driver = new ChromeDriver();
-        driver.get("https://www.bestbuy.com/ ");
-        //driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+    public void startWithTheBestBuyHomePage() throws InterruptedException {
+        driver.get("https://www.bestbuy.com/");
+        //Thread.sleep(5000);
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        List<WebElement> banners = driver.findElements(cookieBanner);
+        if (!banners.isEmpty() && banners.getFirst().isDisplayed()) {
+            // Try click accept; if intercepted, scroll and retry
+            List<WebElement> buttons = driver.findElements(acceptButton);
+            if (!buttons.isEmpty()) {
+                try {
+                    buttons.getFirst().click();
+                } catch (ElementClickInterceptedException e) {
+                    ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", buttons.get(0));
+                    buttons.getFirst().click();
+                }
+                // wait for banner to vanish
+                new WebDriverWait(driver, Duration.ofSeconds(5))
+                        .until(ExpectedConditions.invisibilityOfElementLocated(cookieBanner));
+            }
+        }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
+
     }
 
     @Then("I click on Account button")
     public void i_click_on_account_button() throws InterruptedException {
-        driver.findElement(By.xpath("//span[@class='v-p-right-xxs line-clamp']")).click();
-
-
+        // Wait for the Account button to be clickable
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement accountButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='v-p-right-xxs line-clamp']")));
+        accountButton.click();
+        //Thread.sleep(2000);
+        //driver.findElement(By.xpath("//span[@class='v-p-right-xxs line-clamp']")).click();
     }
 
     @Then("I see the panel with Create account button")
     public void i_see_the_panel_with_create_account_button() throws InterruptedException {
         // Wait for the panel to be visible
-        Thread.sleep(2000);
         // create account button is displayed: Create Account
-        //System.out.println("Create Account button is displayed: " + actual);
-        Assert.assertTrue(driver.findElement(By.xpath("//a[text()='Create Account']")).isDisplayed());
 
-
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Create Account']")));
+        //Assert.assertTrue(driver.findElement(By.xpath("//a[text()='Create Account']")).isDisplayed());
     }
 
     @When("I click on the Create Account button")
-    public void i_click_on_the_create_account_button() {
-        driver.findElement(By.xpath("//a[text()='Create Account']")).click();
+    public void i_click_on_the_create_account_button() throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Create Account']")));
+        element.click();
+
 
     }
 
     @Then("I should be navigated to Create Account page")
-    public void i_should_be_navigated_to_create_account_page() {
+    public void i_should_be_navigated_to_create_account_page() throws InterruptedException {
         String expected = "Best Buy: Create an Account";
         // Wait for the page to load and title to be set
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+        //driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         // Get the actual title of the page
         String actualUrl = driver.getTitle();
         Assert.assertEquals(actualUrl, expected);
@@ -77,75 +103,99 @@ public class BestBuyLoginSteps {
     @Then("I can enter all of my account information")
     public void i_can_enter_all_of_my_account_information() {
         try {
-
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
             WebElement firstName = driver.findElement(By.id("firstName"));
-            firstName.sendKeys("John");
+            firstName.clear();
+            //firstName.sendKeys("SamJ");
+            typeSlowly(By.id("firstName"),"SteveM");
             WebElement lastName = driver.findElement(By.xpath("//input[@name='lastName']"));
-            lastName.sendKeys("Doe");
+            //lastName.sendKeys("Johnson");
+            typeSlowly(By.xpath("//input[@name='lastName']"),"LeeS");
             WebElement emailAddress = driver.findElement(By.xpath("//input[@id='email']"));
             //automate the email address input
-            emailAddress.sendKeys("sachin.test@gmail.com");
+            emailAddress.clear();
+            //emailAddress.sendKeys("Priya468Tar@gmail.com");
+            typeSlowly(By.xpath("//input[@id='email']"),"StevemLees@yahoo.com");
             WebElement password = driver.findElement(By.id("fld-p1"));
-            password.sendKeys("StrongPassword123");
+            //password.sendKeys("Test@123@Test12456");
+            typeSlowly(By.id("fld-p1"),"Plus01Min$1234568");
+            Thread.sleep(1000);
             // The confirm password field is usually the same as the password field
             WebElement confirmPassword = driver.findElement(By.xpath("//input[@id='reenterPassword']"));
-            confirmPassword.sendKeys("StrongPassword123");
+            //confirmPassword.sendKeys("Test@123@Test12456");
+            typeSlowly(By.xpath("//input[@id='reenterPassword']"),"Plus01Min$1234568");
+            Thread.sleep(1000);
             WebElement mobileNo = driver.findElement(By.xpath("//input[@name='phone']"));
-            mobileNo.sendKeys("1234567890");
-            WebElement useforAccountRecovery = driver.findElement(By.xpath("//input[@name='isRecoveryPhone']"));
-            useforAccountRecovery.click();
+            //mobileNo.sendKeys("2122457212");
+            typeSlowly(By.xpath("//input[@name='phone']"),"7017321878");
+            Thread.sleep(2000);
+            WebElement useForAccountRecovery = driver.findElement(By.xpath("//input[@name='isRecoveryPhone']"));
+            useForAccountRecovery.click();
+            //WebElement keepMeSignedIn = driver.findElement(By.id("cia-remember-me"));
+           // keepMeSignedIn.clear();
             WebElement createAccountButton = driver.findElement(By.xpath("//button[@type='submit']"));
             createAccountButton.click();
-
+            //Thread.sleep(5000);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error while entering account information: " + e.getMessage());
         }
-        //driver.quit();
+
     }
 
 
     @Then("I should be navigated to my account page")
     public void i_should_be_navigated_to_my_account_page() throws InterruptedException {
         Thread.sleep(2000);
-        String expectedUrl = "https://www.bestbuy.com/customer/myaccount";
-        String actualUrl = driver.getCurrentUrl();
-        Assert.assertEquals(actualUrl, expectedUrl);
-        System.out.println("Successfully navigated to my account page: " + actualUrl);
+        String expectedTitle = "Account Home - Best Buy";
+        String actualTitle = driver.getTitle();
+        Assert.assertEquals(actualTitle, expectedTitle);
+        System.out.println("Successfully navigated to my account page: " + actualTitle);
+        driver.quit();
     }
 
-    @Given("I am on the BestBuy Create Account page")
-    public void i_am_on_the_best_buy_create_account_page() {
-        //driver= new ChromeDriver();
-        driver.get("https://www.bestbuy.com/identity/newAccount?token=tid%3A60255b47-7eb0-11f0-bc6f-12e22549baeb");
-       // driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-    }
-    @When("I enter {string} it should check for {string}")
-    public void i_enter_it_should_check_for(String string, String invalid) throws InterruptedException {
-       WebElement firstName= driver.findElement(By.id("firstName"));
-       firstName.sendKeys(string);
-       firstName.sendKeys(Keys.ENTER);
-        if(invalid.equals("true")){
 
-            Assert.assertTrue(driver.findElement(By.xpath("//p[text()='Too many numeric characters.']")).isDisplayed());
-    }
-        else
-        {
-            Assert.assertTrue(driver.findElement(By.xpath("//p[text()='Please enter your first name.']")).isDisplayed()) ;
+
+    @When("I enter {string} it should check for password validations {string}")
+    public void i_enter_it_should_check_for_password_validations(String password, String valid) {
+       WebElement passwordtextfield =driver.findElement(By.id("fld-p1"));
+       passwordtextfield.sendKeys(password);
+       passwordtextfield.sendKeys(Keys.TAB);
+        List<WebElement> passwordElement = driver.findElements(By.xpath("//p[text()='Please enter a strong password.']"));
+
+        if(valid.equals("true")){
+            System.out.println("Valid = true " + passwordElement.isEmpty());
+            Assert.assertTrue(passwordElement.isEmpty());
+        }
+        else {
+            System.out.println("Valid = false " + passwordElement.isEmpty());
+            Assert.assertTrue(passwordElement.getFirst().isDisplayed());
+            //Assert.assertFalse(passwordElement.isEmpty());
         }
 
-        //clear the input field for the next test
-        firstName.clear();
+       // driver.quit();
     }
 
 
-    @AfterTest
+    @After
     public void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
+    private void typeSlowly(By locator, String text) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        el.clear();
+        for (char c : text.toCharArray()) {
+            el.sendKeys(Character.toString(c));
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
 
-}
+
+    }
