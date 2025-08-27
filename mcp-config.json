@@ -1,0 +1,68 @@
+{
+  "mcp": {
+    "version": "1.0",
+    "protocol": "ai-testing",
+    "description": "MCP-Enhanced Cucumber Testing Configuration"
+  },
+  
+  "contexts": {
+    "test-analysis": {
+      "model": "cucumber-analyzer-v1",
+      "confidence_threshold": 0.75,
+      "parameters": {
+        "code_change_weight": 0.4,
+        "test_history_weight": 0.3,
+        "risk_assessment_weight": 0.3
+      }
+    },
+    
+    "test-selection": {
+      "model": "smart-selector-v1", 
+      "strategies": {
+        "comprehensive": {
+          "tags": "@regression",
+          "coverage": 0.95,
+          "max_time": 120
+        },
+        "targeted": {
+          "tags": "@smoke or @regression",
+          "coverage": 0.75,
+          "max_time": 60
+        },
+        "smoke": {
+          "tags": "@smoke",
+          "coverage": 0.40,
+          "max_time": 20
+        }
+      }
+    },
+    
+    "results-analysis": {
+      "model": "results-analyzer-v1",
+      "quality_gates": {
+        "success_rate_minimum": 85,
+        "deployment_threshold": 90,
+        "critical_failure_limit": 0
+      }
+    }
+  },
+  
+  "integrations": {
+    "github_actions": {
+      "enabled": true,
+      "artifact_retention": 30
+    },
+    
+    "cucumber_reports": {
+      "formats": ["json", "html", "junit"],
+      "output_dir": "mcp-results"
+    }
+  },
+  
+  "ai_features": {
+    "smart_test_selection": true,
+    "failure_prediction": true,
+    "deployment_readiness": true,
+    "automated_insights": true
+  }
+} 
