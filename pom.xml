@@ -48,6 +48,13 @@
             <artifactId>testng</artifactId>
             <version>7.11.0</version>
         </dependency>
+        <!-- Playwright -->
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.44.0</version>
+        </dependency>
+
     </dependencies>
 
 
