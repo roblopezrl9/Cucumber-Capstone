@@ -53,32 +53,40 @@ public class BestBuySteps {
 
         System.out.println("When I close the add modal and search for “macbook pro”");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // wait for the input element to be visible
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("store-display-name")));
         WebElement inputBar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("autocomplete-search-bar")));
+        // send keys to the input element
         inputBar.sendKeys("macbook pro");
+        // find the search button and click it
         WebElement searchButton = driver.findElement(By.id("autocomplete-search-button"));
+        // click the search button
         searchButton.click();
 
     }
 
-    @Then("one of the laptops listed should be {double} 8GB Memory and 256GB SSD")
-    public void one_of_the_laptops_listed_should_be_8gb_memory_and_256gb_ssd(Double double1) {
+    @Then("one of the laptops listed should be 14 24GB Memory and 512GB SSD")
+    public void one_of_the_laptops_listed_should_be_14_24gb_memory_and_512gb_ssd() {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println("one of the laptops listed should be {double}” 8GB Memory and 256GB SSD");
+        System.out.println("one of the laptops listed should be 14 8GB Memory and 256GB SSD");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        // wait for the laptop with the specified specs to be visible
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
+                "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        // assert that the laptop with the specified specs is found
         Assert.assertTrue(macBook.getText().contains("16"));
         Assert.assertTrue(macBook.getText().contains("24GB Memory"));
         Assert.assertTrue(macBook.getText().contains("512GB SSD"));
-
-//        System.out.println("Found a 16 inch mac with 24 GB Memory and 512GB SSD: " + macBook.findElement(By.className("product-title")).getText());
 
     }
 
     @Given("I perform the above search")
     public void i_perform_the_above_search() {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println("We are in the given i perform above");
+        // Get the title of the search results page and verify it contains "macbook pro"
+        String searchResult = driver.findElement(By.cssSelector("#promo-title")).getText();
+        Assert.assertTrue(searchResult.contains("macbook pro"), "Search result does not contain 'macbook pro'");
+
 
     }
     @When("I click the “Add to Cart” button next to the laptop")
@@ -86,7 +94,8 @@ public class BestBuySteps {
         // Write code here that turns the phrase above into concrete actions
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
+                "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
         System.out.println(macBook.getText());
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"))));
         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", button );
@@ -102,9 +111,9 @@ public class BestBuySteps {
     }
     @Then("I should see a modal window with the cart subtotal")
     public void i_should_see_a_modal_window_with_the_cart_subtotal() {
-//         Write code here that turns the phrase above into concrete actions
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         System.out.println("I should see a modal window with the cart subtotal");
+        // wait for the cart subtotal to be visible
         WebElement cartSubtotal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-subtotal")));
         String actualText = cartSubtotal.getText();
         String expectedText = "Cart Subtotal";
@@ -116,6 +125,8 @@ public class BestBuySteps {
     public void i_am_on_the_best_buy_modal_page() {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("I am in the Best Buy Modal page");
+        String modalText = driver.findElement(By.className("added-to-cart")).getText();
+        Assert.assertEquals(modalText, "Added to cart", "Modal text does not match expected text");
     }
 
     @When("I click on go to cart")
@@ -187,13 +198,15 @@ public class BestBuySteps {
         // Your cart is empty
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        WebElement emptyCartMessage = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.heading-5.page-heading__title"))
-        );
-        System.out.println("Message: "+ emptyCartMessage.getText());
-        String expectedMessage = "Your cart is empty";
-        String actualMessage = emptyCartMessage.getText();
-        org.junit.Assert.assertEquals(expectedMessage, actualMessage);
+        Boolean emptyCartMessage = wait.until(ExpectedConditions.textToBe(
+                By.cssSelector("h1.heading-5.page-heading__title"),
+                "Your cart is empty"
+        ));
+//        System.out.println("Message: "+ emptyCartMessage.getText());
+//        String expectedMessage = "Your cart is empty";
+//        String actualMessage = emptyCartMessage.getText();
+//        org.junit.Assert.assertEquals(expectedMessage, actualMessage);
+        Assert.assertTrue(emptyCartMessage, "The message does not match. The cart is not empty.");
     }
 
     @Then("I close the browser")
