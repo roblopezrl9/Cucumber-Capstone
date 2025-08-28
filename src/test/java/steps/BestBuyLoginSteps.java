@@ -1,6 +1,6 @@
 package steps;
 
-import io.cucumber.java.Before;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -25,7 +25,6 @@ public class BestBuyLoginSteps {
     );
 
 
-    @Before
     @Given("start with the BestBuy home page")
     public void startWithTheBestBuyHomePage() throws InterruptedException {
         driver.get("https://www.bestbuy.com/");
@@ -151,7 +150,7 @@ public class BestBuyLoginSteps {
         String actualTitle = driver.getTitle();
         Assert.assertEquals(actualTitle, expectedTitle);
         System.out.println("Successfully navigated to my account page: " + actualTitle);
-        WebDriverManager.closeDriver();
+        // Note: Driver remains open for subsequent scenarios
     }
 
 
@@ -178,10 +177,7 @@ public class BestBuyLoginSteps {
     }
 
 
-    @After
-    public void tearDown() {
-        WebDriverManager.closeDriver();
-    }
+
 
     private void typeSlowly(By locator, String text) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

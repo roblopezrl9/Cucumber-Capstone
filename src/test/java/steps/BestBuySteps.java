@@ -16,7 +16,6 @@ import org.testng.Assert;
 
 import java.time.Duration;
 
-
 public class BestBuySteps {
     WebDriver driver = WebDriverManager.getDriver();
 
@@ -151,9 +150,10 @@ public class BestBuySteps {
     @Given("I am on the Best Buy Cart page")
     public void i_am_on_the_best_buy_cart_page() {
         // Write code here that turns the phrase above into concrete actions
-        String expUrl = "https://www.bestbuy.com/cart";
-        String actUrl = driver.getCurrentUrl();
-        Assert.assertEquals(actUrl, expUrl);
+        System.out.println("I am on the Best Buy Cart page");
+        String cartUrl = "https://www.bestbuy.com/cart";
+        String actualUrl = driver.getCurrentUrl();
+        Assert.assertEquals(actualUrl, cartUrl, "Not on the cart page");
     }
 
     @When("I remove an item from the cart")
@@ -184,6 +184,8 @@ public class BestBuySteps {
     public void i_verify_that_the_item_is_removed_from_the_cart() {
         // Write code here that turns the phrase above into concrete actions
 
+        // h1 class="heading-5 page-heading__title" what shoudl show
+        // Your cart is empty
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         Boolean emptyCartMessage = wait.until(ExpectedConditions.textToBe(
@@ -197,6 +199,6 @@ public class BestBuySteps {
     @Then("I close the browser")
     public void i_close_the_browser() {
         // Write code here that turns the phrase above into concrete actions
-        WebDriverManager.closeDriver();
+        driver.quit();
     }
 }
