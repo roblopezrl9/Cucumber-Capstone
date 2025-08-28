@@ -1,63 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Cucumber" time="86.76" tests="4" skipped="0" failures="1" errors="0">
-<testcase classname="Searching on BestBuy" name="searching for a product" time="45.712">
+<testsuite name="Cucumber" time="92.475" tests="4" skipped="0" failures="0" errors="0">
+<testcase classname="Searching on BestBuy" name="searching for a product" time="44.701">
 <system-out><![CDATA[
 Given I am on the BestBuy home page.........................................passed
 When When I close the add modal and search for “macbook pro”................passed
 Then one of the laptops listed should be 14 24GB Memory and 512GB SSD.......passed
 ]]></system-out>
 </testcase>
-<testcase classname="Searching on BestBuy" name="adding product to cart" time="10.175">
+<testcase classname="Searching on BestBuy" name="adding product to cart" time="12.082">
 <system-out><![CDATA[
 Given I perform the above search............................................passed
 When I click the “Add to Cart” button next to the laptop....................passed
 Then I should see a modal window with the cart subtotal.....................passed
 ]]></system-out>
 </testcase>
-<testcase classname="Searching on BestBuy" name="checking product is in the cart page" time="14.723">
-<failure type="org.openqa.selenium.NoSuchElementException" message="no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;//*[@id='cartApp']/div[2]/div/div[1]/div/div[1]/div[1]/section[2]/div/div/div[1]/div/table/tbody/tr[5]&quot;}
-  (Session info: chrome=138.0.7204.101)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
-Build info: version: '4.34.0', revision: '707dcb4246*'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '22.0.2'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [89a4d7122dd34d3b7d3bc958358dd4e8, findElement {using=xpath, value=//*[@id='cartApp']/div[2]/div/div[1]/div/div[1]/div[1]/section[2]/div/div/div[1]/div/table/tbody/tr[5]}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.101, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\2433393\AppData\Lo...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:58670}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:58670/devtoo..., se:cdpVersion: 138.0.7204.101, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 89a4d7122dd34d3b7d3bc958358dd4e8">
-<![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//*[@id='cartApp']/div[2]/div/div[1]/div/div[1]/div[1]/section[2]/div/div/div[1]/div/table/tbody/tr[5]"}
-  (Session info: chrome=138.0.7204.101)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
-Build info: version: '4.34.0', revision: '707dcb4246*'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '22.0.2'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [89a4d7122dd34d3b7d3bc958358dd4e8, findElement {using=xpath, value=//*[@id='cartApp']/div[2]/div/div[1]/div/div[1]/div[1]/section[2]/div/div/div[1]/div/table/tbody/tr[5]}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.101, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\2433393\AppData\Lo...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:58670}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:58670/devtoo..., se:cdpVersion: 138.0.7204.101, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 89a4d7122dd34d3b7d3bc958358dd4e8
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
-	at org.openqa.selenium.remote.ErrorCodec.decode(ErrorCodec.java:167)
-	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:138)
-	at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:50)
-	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:215)
-	at org.openqa.selenium.remote.service.DriverCommandExecutor.invokeExecute(DriverCommandExecutor.java:216)
-	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:174)
-	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:544)
-	at org.openqa.selenium.remote.ElementLocation$ElementFinder$2.findElement(ElementLocation.java:165)
-	at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:367)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:361)
-	at steps.BestBuySteps.i_navigate_to_the_laptop_and_the_order_summary(BestBuySteps.java:141)
-	at ✽.I navigate to the laptop and the order summary(file:///C:/Users/2433393/OneDrive%20-%20Cognizant/Desktop/Cucumber-Capstone/src/test/resources/features/BestBuy.feature:19)
-]]>
-</failure>
+<testcase classname="Searching on BestBuy" name="checking product is in the cart page" time="19.715">
 <system-out><![CDATA[
 Given I am on the Best Buy modal page.......................................passed
 When I click on go to cart..................................................passed
-Then I navigate to the laptop and the order summary.........................failed
+Then I navigate to the laptop and the order summary.........................passed
 ]]></system-out>
 </testcase>
-<testcase classname="Searching on BestBuy" name="Remove item from cart" time="15.186">
+<testcase classname="Searching on BestBuy" name="Remove item from cart" time="15.482">
 <system-out><![CDATA[
 Given I am on the Best Buy Cart page........................................passed
 When I remove an item from the cart.........................................passed
