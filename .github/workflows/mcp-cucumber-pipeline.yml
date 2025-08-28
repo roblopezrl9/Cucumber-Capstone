@@ -18,7 +18,7 @@ on:
           - smoke
 
 env:
-  JAVA_VERSION: '17'
+  JAVA_VERSION: '22'
   MCP_ENABLED: true
 
 jobs:

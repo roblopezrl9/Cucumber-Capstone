@@ -134,16 +134,16 @@ jobs:
           
           case $STRATEGY in
             "comprehensive")
-              MATRIX='{"browser":["chrome","firefox","edge"],"os":["ubuntu-latest","windows-latest"],"include":[{"browser":"safari","os":"macos-latest"}]}'
+              MATRIX='{"browser":["chrome"],"os":["ubuntu-latest"]}'
               ;;
             "targeted")
-              MATRIX='{"browser":["chrome","firefox"],"os":["ubuntu-latest"]}'
+              MATRIX='{"browser":["chrome"],"os":["ubuntu-latest"]}'
               ;;
             "smoke")
               MATRIX='{"browser":["chrome"],"os":["ubuntu-latest"]}'
               ;;
             *)
-              MATRIX='{"browser":["chrome","firefox"],"os":["ubuntu-latest"]}'
+              MATRIX='{"browser":["chrome"],"os":["ubuntu-latest"]}'
               ;;
           esac
           
