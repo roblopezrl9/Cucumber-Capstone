@@ -82,7 +82,6 @@ public class BestBuySteps {
 
     }
 
-
     @When("I click the “Add to Cart” button next to the laptop")
     public void i_click_the_add_to_cart_button_next_to_the_laptop() {
         // Write code here that turns the phrase above into concrete actions
@@ -116,10 +115,10 @@ public class BestBuySteps {
     }
 
 
-    // GO TO MODAL PAGE
+    // Scenario: checking product is in the cart page
     @Given("I am on the Best Buy modal page")
     public void i_am_on_the_best_buy_modal_page() {
-        // Write code here that turns the phrase above into concrete actions
+        // The code below checks if we are on the modal page
         System.out.println("I am in the Best Buy Modal page");
         String modalText = driver.findElement(By.className("added-to-cart")).getText();
         Assert.assertEquals(modalText, "Added to cart", "Modal text does not match expected text");
@@ -127,6 +126,7 @@ public class BestBuySteps {
 
     @When("I click on go to cart")
     public void i_click_on_go_to_cart() {
+        // Try to click on the "Go to Cart" button in the modal
         try{
             Thread.sleep(5000);
             WebElement goToCart = driver.findElement(By.xpath("//*[@id='recs-interruptor-drawer-overlay-backdrop']/div/div[3]/div/div/div/div[2]"));
@@ -138,10 +138,11 @@ public class BestBuySteps {
     }
 
     @Then("I navigate to the laptop and the order summary")
-    public void i_navigate_to_the_laptop_and_the_order_summary() {
+    public void i_navigate_to_the_laptop_and_the_order_summary() throws InterruptedException {
         // Verify we are on the cart page and print the total amount
         String expUrl = "https://www.bestbuy.com/cart";
         String actUrl = driver.getCurrentUrl();
+        Thread.sleep(5000);
         WebElement amountSummary = driver.findElement(By.xpath("//tr[.//span[text()='Total']]/td[starts-with(normalize-space(.), '$')]"));
         System.out.println("Total: "+ amountSummary.getText());
         Assert.assertEquals(actUrl, expUrl);
@@ -164,14 +165,15 @@ public class BestBuySteps {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("REMOVE ITEM FROM CART ");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         // Wait for the cart to be clickable and click it
         try {
             driver.getCurrentUrl();
+            // Click on the cart icon to view cart items
             WebElement cart = wait.until(
                     ExpectedConditions.elementToBeClickable(By.cssSelector("span.cart-label"))
             );
             cart.click();
+            // Wait for the remove button to be clickable and click it
             WebElement removeButton = wait.until(
                     ExpectedConditions.elementToBeClickable(By.cssSelector("button.cart-item__remove"))
             );
@@ -179,29 +181,26 @@ public class BestBuySteps {
         } catch (Exception e) {
             throw new RuntimeException("Cart is not clickable: " + e.getMessage());
         }
-
     }
-
 
     @Then("I verify that the item is removed from the cart")
     public void i_verify_that_the_item_is_removed_from_the_cart() {
         // Write code here that turns the phrase above into concrete actions
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
         // Wait for the cart to update and show "Your cart is empty" message
         Boolean emptyCartMessage = wait.until(ExpectedConditions.textToBe(
                 By.cssSelector("h1.heading-5.page-heading__title"),
                 "Your cart is empty"
         ));
-
         Assert.assertTrue(emptyCartMessage, "The message does not match. The cart is not empty.");
     }
 
 
 
-    @Then("I close the browser")
-    public void i_close_the_browser() {
-        // Write code here that turns the phrase above into concrete actions
-        driver.quit();
-    }
+//    @Then("I close the browser")
+//    public void i_close_the_browser() {
+//        // Write code here that turns the phrase above into concrete actions
+//        driver.quit();
+//    }
+
 }

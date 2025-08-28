@@ -24,6 +24,3 @@ Feature: Searching on BestBuy
     When I remove an item from the cart
     Then I verify that the item is removed from the cart
 
-  @T2
-  Scenario: Clean up
-    Then I close the browser

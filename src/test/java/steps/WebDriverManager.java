@@ -1,6 +1,6 @@
 package steps;
 
-
+import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -18,81 +18,63 @@ public class WebDriverManager {
 
     public static WebDriver getDriver(){
         if (driver == null){
+            //io.github.bonigarcia.wdm.WebDriverManager.chromedriver().setup();
             ChromeOptions opts = new ChromeOptions();
             
-            // Detect CI/CD environment (GitHub Actions)
+            // Detect CI environment for speed optimizations
             boolean isCI = System.getenv("CI") != null || System.getenv("GITHUB_ACTIONS") != null;
             
             if (isCI) {
-                // Headless mode for CI/CD - make it behave EXACTLY like windowed mode
+                // CI/CD mode - optimized for 5min pipeline
                 opts.addArguments("--headless=new");
                 opts.addArguments("--no-sandbox");
                 opts.addArguments("--disable-dev-shm-usage");
                 opts.addArguments("--disable-gpu");
                 
-                // Window behavior - exact same as your IntelliJ
-                opts.addArguments("--window-size=1920,1080");
-                opts.addArguments("--start-maximized");
-                
-                // JavaScript and rendering - same as windowed
-                opts.addArguments("--disable-web-security");
-                opts.addArguments("--allow-running-insecure-content");
-                opts.addArguments("--disable-features=VizDisplayCompositor");
-                opts.addArguments("--enable-javascript");
+                // Speed optimizations for 5min target
+                opts.addArguments("--disable-extensions");
+                opts.addArguments("--disable-plugins");
+                opts.addArguments("--disable-images");
+                opts.addArguments("--disable-background-networking");
                 opts.addArguments("--disable-background-timer-throttling");
                 opts.addArguments("--disable-renderer-backgrounding");
                 opts.addArguments("--disable-backgrounding-occluded-windows");
-                
-                // Modal and popup behavior - same as windowed
-                opts.addArguments("--disable-popup-blocking");
+                opts.addArguments("--disable-client-side-phishing-detection");
                 opts.addArguments("--disable-default-apps");
+                opts.addArguments("--disable-hang-monitor");
+                opts.addArguments("--disable-prompt-on-repost");
+                opts.addArguments("--disable-sync");
                 opts.addArguments("--disable-translate");
+                opts.addArguments("--metrics-recording-only");
+                opts.addArguments("--no-first-run");
+                opts.addArguments("--disable-logging");
+                opts.addArguments("--disable-permissions-api");
+                opts.addArguments("--aggressive-cache-discard");
                 
-                // Performance - same as windowed
-                opts.addArguments("--memory-pressure-off");
-                opts.addArguments("--max_old_space_size=4096");
-                
-                System.out.println("🚀 Running in CI/CD mode (headless configured to match IntelliJ behavior)");
+                System.out.println("🚀 CI/CD Mode: Speed-optimized for 5min pipeline");
             } else {
-                // Windowed mode for local testing (your working IntelliJ setup)
+                // Local mode - your existing settings
                 opts.addArguments("--start-maximized");
-                System.out.println("🖥️ Running in local mode (windowed - IntelliJ setup)");
+                System.out.println("🖥️ Local Mode: Standard settings");
             }
             
+            // Common settings for both modes
             opts.addArguments("--lang=en-US");
+            opts.addArguments("--window-size=1920,1080");
+            opts.addArguments("--disable-blink-features=AutomationControlled");
 
-            // Browser preferences - make CI behave exactly like your IntelliJ
+            // Browser preferences
             Map<String, Object> prefs = new HashMap<>();
             prefs.put("profile.default_content_setting_values.geolocation", 1);
             prefs.put("profile.block_third_party_cookies", false);
-            prefs.put("profile.default_content_setting_values.popups", 1); // Allow popups (like your IntelliJ)
-            prefs.put("profile.default_content_setting_values.notifications", 1); // Allow notifications
-            prefs.put("profile.managed_default_content_settings.images", 1); // Load images
-            prefs.put("profile.default_content_settings.popups", 0); // Allow popups
             opts.setExperimentalOption("prefs", prefs);
 
-            // Soften automation fingerprint a bit
+            // Soften automation fingerprint
             opts.setExperimentalOption("excludeSwitches", java.util.List.of("enable-automation"));
             opts.setExperimentalOption("useAutomationExtension", false);
 
             driver = new ChromeDriver(opts);
-
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
-            
-            // Initialize DevTools only in local mode (can cause issues in CI headless)
-            if (!isCI) {
-                try {
-                    devTools = ((ChromiumDriver) driver).getDevTools();
-                    devTools.createSession();
-                    
-                    //Hide webdriver flag (won't bypass CAPTCHAs; just reduces false positives)
-                    ((org.openqa.selenium.JavascriptExecutor)driver)
-                            .executeScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
-                } catch (Exception e) {
-                    System.out.println("⚠️ DevTools initialization failed: " + e.getMessage());
-                }
-            }
-
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         }
         return driver;
         /*if (driver == null){
@@ -100,5 +82,13 @@ public class WebDriverManager {
             driver.manage().window().maximize();
         }
         return driver;*/
+    }
+
+
+    public static void quitDriver(){
+        if (driver != null){
+            driver.quit();
+            driver = null;
+        }
     }
 }

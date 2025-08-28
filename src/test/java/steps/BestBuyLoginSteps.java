@@ -1,6 +1,5 @@
 package steps;
 
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -23,7 +22,6 @@ public class BestBuyLoginSteps {
             "#onetrust-accept-btn-handler, button#onetrust-accept-btn-handler, " +
                     "button[aria-label*='Accept' i], button[aria-label*='Allow all' i]"
     );
-
 
     @Given("start with the BestBuy home page")
     public void startWithTheBestBuyHomePage() throws InterruptedException {
@@ -132,6 +130,7 @@ public class BestBuyLoginSteps {
             WebElement useForAccountRecovery = driver.findElement(By.xpath("//input[@name='isRecoveryPhone']"));
             useForAccountRecovery.click();
             //WebElement keepMeSignedIn = driver.findElement(By.id("cia-remember-me"));
+           // keepMeSignedIn.clear();
             WebElement createAccountButton = driver.findElement(By.xpath("//button[@type='submit']"));
             createAccountButton.click();
             //Thread.sleep(5000);
@@ -150,18 +149,16 @@ public class BestBuyLoginSteps {
         String actualTitle = driver.getTitle();
         Assert.assertEquals(actualTitle, expectedTitle);
         System.out.println("Successfully navigated to my account page: " + actualTitle);
-        // Note: Driver remains open for subsequent scenarios
+        driver.quit();
     }
 
 
 
     @When("I enter {string} it should check for password validations {string}")
     public void i_enter_it_should_check_for_password_validations(String password, String valid) {
-
        WebElement passwordtextfield =driver.findElement(By.id("fld-p1"));
        passwordtextfield.sendKeys(password);
        passwordtextfield.sendKeys(Keys.TAB);
-
         List<WebElement> passwordElement = driver.findElements(By.xpath("//p[text()='Please enter a strong password.']"));
 
         if(valid.equals("true")){
@@ -174,10 +171,16 @@ public class BestBuyLoginSteps {
             //Assert.assertFalse(passwordElement.isEmpty());
         }
 
+       // driver.quit();
     }
 
 
-
+    @After
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
 
     private void typeSlowly(By locator, String text) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -193,6 +196,4 @@ public class BestBuyLoginSteps {
     }
 
 
-
     }
-
