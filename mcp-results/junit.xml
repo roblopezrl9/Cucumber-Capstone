@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Cucumber" time="92.475" tests="4" skipped="0" failures="0" errors="0">
-<testcase classname="Searching on BestBuy" name="searching for a product" time="44.701">
+<testsuite name="Cucumber" time="112.987" tests="4" skipped="0" failures="0" errors="0">
+<testcase classname="Searching on BestBuy" name="searching for a product" time="48.66">
 <system-out><![CDATA[
 Given I am on the BestBuy home page.........................................passed
 When When I close the add modal and search for “macbook pro”................passed
 Then one of the laptops listed should be 14 24GB Memory and 512GB SSD.......passed
 ]]></system-out>
 </testcase>
-<testcase classname="Searching on BestBuy" name="adding product to cart" time="12.082">
+<testcase classname="Searching on BestBuy" name="adding product to cart" time="17.083">
 <system-out><![CDATA[
 Given I perform the above search............................................passed
 When I click the “Add to Cart” button next to the laptop....................passed
 Then I should see a modal window with the cart subtotal.....................passed
 ]]></system-out>
 </testcase>
-<testcase classname="Searching on BestBuy" name="checking product is in the cart page" time="19.715">
+<testcase classname="Searching on BestBuy" name="checking product is in the cart page" time="26.258">
 <system-out><![CDATA[
 Given I am on the Best Buy modal page.......................................passed
 When I click on go to cart..................................................passed
 Then I navigate to the laptop and the order summary.........................passed
 ]]></system-out>
 </testcase>
-<testcase classname="Searching on BestBuy" name="Remove item from cart" time="15.482">
+<testcase classname="Searching on BestBuy" name="Remove item from cart" time="20.083">
 <system-out><![CDATA[
 Given I am on the Best Buy Cart page........................................passed
 When I remove an item from the cart.........................................passed

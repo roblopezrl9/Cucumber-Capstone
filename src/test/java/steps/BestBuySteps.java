@@ -138,7 +138,7 @@ public class BestBuySteps {
     public void i_navigate_to_the_laptop_and_the_order_summary() {
         String expUrl = "https://www.bestbuy.com/cart";
         String actUrl = driver.getCurrentUrl();
-        WebElement amountSummary = driver.findElement(By.xpath("//*[@id='cartApp']/div[2]/div/div[1]/div/div[1]/div[1]/section[2]/div/div/div[1]/div/table/tbody/tr[5]"));
+        WebElement amountSummary = driver.findElement(By.xpath("//tr[.//span[text()='Total']]/td[starts-with(normalize-space(.), '$')]\n"));
         System.out.println("Total: "+ amountSummary.getText());
         Assert.assertEquals(actUrl, expUrl);
     }

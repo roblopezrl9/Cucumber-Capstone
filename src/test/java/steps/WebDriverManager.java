@@ -24,12 +24,17 @@ public class WebDriverManager {
             boolean isCI = System.getenv("CI") != null || System.getenv("GITHUB_ACTIONS") != null;
             
             if (isCI) {
-                // Headless mode for CI/CD
+                // Headless mode for CI/CD with window-like behavior
                 opts.addArguments("--headless=new");
                 opts.addArguments("--no-sandbox");
                 opts.addArguments("--disable-dev-shm-usage");
                 opts.addArguments("--disable-gpu");
-                System.out.println("🚀 Running in CI/CD mode (headless)");
+                // Make headless mode behave more like windowed mode
+                opts.addArguments("--window-size=1920,1080");
+                opts.addArguments("--disable-web-security");
+                opts.addArguments("--allow-running-insecure-content");
+                opts.addArguments("--disable-features=VizDisplayCompositor");
+                System.out.println("🚀 Running in CI/CD mode (headless with window-like behavior)");
             } else {
                 // Windowed mode for local testing
                 opts.addArguments("--start-maximized");
