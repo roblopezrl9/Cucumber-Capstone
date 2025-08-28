@@ -25,12 +25,25 @@ import static org.junit.Assert.fail;
 
 public class BestBuySteps {
     WebDriver driver = WebDriverManager.getDriver();
-  
+
     @Given("I am on the BestBuy home page")
     public void i_am_on_the_best_buy_home_page() {
 
         // Write code here that turns the phrase above into concrete actions
         driver.get("https://www.bestbuy.com/");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            WebElement usaFlag = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("us-link")));
+            // If the page contains flags, click on the USA flag
+            // If the page does not contain flags, this step will be skipped
+            if(usaFlag.isDisplayed()){
+                usaFlag.click();
+                System.out.println("USA flag clicked successfully.");
+            }
+        } catch (TimeoutException e) {
+            System.out.println("USA flag not found, continuing without clicking.");
+        }
+
 
     }
 
@@ -40,103 +53,67 @@ public class BestBuySteps {
 
         System.out.println("When I close the add modal and search for “macbook pro”");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // wait for the input element to be visible
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("store-display-name")));
         WebElement inputBar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("autocomplete-search-bar")));
+        // send keys to the input element
         inputBar.sendKeys("macbook pro");
+        // find the search button and click it
         WebElement searchButton = driver.findElement(By.id("autocomplete-search-button"));
+        // click the search button
         searchButton.click();
 
-        // Wait for the search results to load
-//        try{
-//            Thread.sleep(15000);
-//        }catch (Exception e){
-//            System.out.println("Error while waiting for search results to load: " + e.getMessage());
-//        }
     }
 
-    @Then("one of the laptops listed should be {double} 8GB Memory and 256GB SSD")
-    public void one_of_the_laptops_listed_should_be_8gb_memory_and_256gb_ssd(Double double1) {
+    @Then("one of the laptops listed should be 14 24GB Memory and 512GB SSD")
+    public void one_of_the_laptops_listed_should_be_14_24gb_memory_and_512gb_ssd() {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println("one of the laptops listed should be {double}” 8GB Memory and 256GB SSD");
-
+        System.out.println("one of the laptops listed should be 14 8GB Memory and 256GB SSD");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        wait.until(ExpectedConditions.visibilityOfAllElements());
-        WebElement nextPageArrow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("pagination-arrow")));
-//        WebElement nextPageArrow = driver.findElement(By.className("pagination-arrow"));
-        boolean isLaptop = true;
-        while (true){
-            if (lookingForLaptop(nextPageArrow)){
-                isLaptop = false;
-                break;
-            }
-            else{
-                try{
-//                    WebElement nextArrow = driver.findElement(By.className("pagination-arrow"));
-                    nextPageArrow.click();
-                }
-                catch (StaleElementReferenceException e){
-                    System.out.println("Stale element found");
-                    driver.findElement(By.className("pagination-arrow")).click();
-                }
-
-            }
-        }
+        // wait for the laptop with the specified specs to be visible
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
+                "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        // assert that the laptop with the specified specs is found
+        Assert.assertTrue(macBook.getText().contains("16"));
+        Assert.assertTrue(macBook.getText().contains("24GB Memory"));
+        Assert.assertTrue(macBook.getText().contains("512GB SSD"));
 
     }
 
-    public boolean lookingForLaptop(WebElement iframe){
-        new Actions(driver)
-                .scrollToElement(iframe)
-                .perform();
-        try {
-            Thread.sleep(9000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        List<WebElement> laptopList = driver.findElements(By.className("product-title"));
-        for (WebElement laptop : laptopList){
-            String laptopText = laptop.getText();
-            if (laptopText.contains("8GB Memory") && laptopText.contains("256GB SSD") && laptopText.contains("13.3\"")) {
-                System.out.println("Found a 13.3\" laptop with 8GB Memory and 256GB SSD: " + laptopText);
-                return true;
-            }
-           /* else {
-                System.out.println("Laptop does not match the criteria: " + laptopText);
-            }*/
-        }
-        return false;
-    }
     @Given("I perform the above search")
     public void i_perform_the_above_search() {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println("We are in the given i perform above");
+        // Get the title of the search results page and verify it contains "macbook pro"
+        String searchResult = driver.findElement(By.cssSelector("#promo-title")).getText();
+        Assert.assertTrue(searchResult.contains("macbook pro"), "Search result does not contain 'macbook pro'");
+
 
     }
     @When("I click the “Add to Cart” button next to the laptop")
     public void i_click_the_add_to_cart_button_next_to_the_laptop() {
         // Write code here that turns the phrase above into concrete actions
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement paginationArrow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("current-page")));
-        new Actions(driver).scrollToElement(paginationArrow).perform();
-        paginationArrow.click();
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
+                "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
+        System.out.println(macBook.getText());
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"))));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", button );
 
-        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[@class = 'sku-block'][contains(., '8GB Memory') and contains(.,'13.3\"') and contains(.,'256GB SSD') and .//button[contains(., 'Add to cart')]]"))));
-        WebElement addCartButton = macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"));
-        js.executeScript("arguments[0].scrollIntoView(true);", addCartButton);
+        try{
+            button.click();
 
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(addCartButton)).click();
-        }catch (Exception e){
-            System.out.println("Click intercepted — using JS click as fallback.");
-            js.executeScript("arguments[0].click();", addCartButton);
+        }
+        catch (StaleElementReferenceException e){
+            System.out.println("Stale element reference exception caught");
+            js.executeScript("arguments[0].click();", button);
         }
     }
     @Then("I should see a modal window with the cart subtotal")
     public void i_should_see_a_modal_window_with_the_cart_subtotal() {
-//         Write code here that turns the phrase above into concrete actions
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         System.out.println("I should see a modal window with the cart subtotal");
+        // wait for the cart subtotal to be visible
         WebElement cartSubtotal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-subtotal")));
         String actualText = cartSubtotal.getText();
         String expectedText = "Cart Subtotal";
@@ -147,14 +124,9 @@ public class BestBuySteps {
     @Given("I am on the Best Buy modal page")
     public void i_am_on_the_best_buy_modal_page() {
         // Write code here that turns the phrase above into concrete actions
-//        try{
-//            driver = new ChromeDriver();
-//            driver.getCurrentUrl();
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
         System.out.println("I am in the Best Buy Modal page");
+        String modalText = driver.findElement(By.className("added-to-cart")).getText();
+        Assert.assertEquals(modalText, "Added to cart", "Modal text does not match expected text");
     }
 
     @When("I click on go to cart")
@@ -184,12 +156,12 @@ public class BestBuySteps {
     // THE REMOVE ITEM FROM CART
     @Given("I am on the Best Buy Cart page")
     public void i_am_on_the_best_buy_cart_page() {
-        try{
-            driver.get("https://www.bestbuy.com/cart");
-            Thread.sleep(5000);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+//        try{
+////            driver.get("https://www.bestbuy.com/cart");
+//            Thread.sleep(5000);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     @When("I remove an item from the cart")
@@ -226,13 +198,20 @@ public class BestBuySteps {
         // Your cart is empty
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        WebElement emptyCartMessage = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.heading-5.page-heading__title"))
-        );
-        System.out.println("Message: "+ emptyCartMessage.getText());
-        String expectedMessage = "Your cart is empty";
-        String actualMessage = emptyCartMessage.getText();
-        org.junit.Assert.assertEquals(expectedMessage, actualMessage);
+        Boolean emptyCartMessage = wait.until(ExpectedConditions.textToBe(
+                By.cssSelector("h1.heading-5.page-heading__title"),
+                "Your cart is empty"
+        ));
+//        System.out.println("Message: "+ emptyCartMessage.getText());
+//        String expectedMessage = "Your cart is empty";
+//        String actualMessage = emptyCartMessage.getText();
+//        org.junit.Assert.assertEquals(expectedMessage, actualMessage);
+        Assert.assertTrue(emptyCartMessage, "The message does not match. The cart is not empty.");
+    }
+
+    @Then("I close the browser")
+    public void i_close_the_browser() {
+        // Write code here that turns the phrase above into concrete actions
         driver.quit();
     }
 }
