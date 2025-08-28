@@ -20,61 +20,32 @@ public class WebDriverManager {
         if (driver == null){
             //io.github.bonigarcia.wdm.WebDriverManager.chromedriver().setup();
             ChromeOptions opts = new ChromeOptions();
-            
-            // Detect CI environment for speed optimizations
-            boolean isCI = System.getenv("CI") != null || System.getenv("GITHUB_ACTIONS") != null;
-            
-            if (isCI) {
-                // CI/CD mode - optimized for 5min pipeline
+            opts.addArguments("--start-maximized", "--lang=en-US");
+            opts.addArguments("window-size=1920, 1080");
+            opts.addArguments("--disable-blink-features=AutomationControlled");
+
+            // Only add headless mode when running in CI (GitHub Actions)
+            if (System.getenv("CI_HEADLESS") != null) {
                 opts.addArguments("--headless=new");
                 opts.addArguments("--no-sandbox");
                 opts.addArguments("--disable-dev-shm-usage");
                 opts.addArguments("--disable-gpu");
-                
-                // Speed optimizations for 5min target
-                opts.addArguments("--disable-extensions");
-                opts.addArguments("--disable-plugins");
-                opts.addArguments("--disable-images");
-                opts.addArguments("--disable-background-networking");
-                opts.addArguments("--disable-background-timer-throttling");
-                opts.addArguments("--disable-renderer-backgrounding");
-                opts.addArguments("--disable-backgrounding-occluded-windows");
-                opts.addArguments("--disable-client-side-phishing-detection");
-                opts.addArguments("--disable-default-apps");
-                opts.addArguments("--disable-hang-monitor");
-                opts.addArguments("--disable-prompt-on-repost");
-                opts.addArguments("--disable-sync");
-                opts.addArguments("--disable-translate");
-                opts.addArguments("--metrics-recording-only");
-                opts.addArguments("--no-first-run");
-                opts.addArguments("--disable-logging");
-                opts.addArguments("--disable-permissions-api");
-                opts.addArguments("--aggressive-cache-discard");
-                
-                System.out.println("🚀 CI/CD Mode: Speed-optimized for 5min pipeline");
+                System.out.println("Running in CI headless mode");
             } else {
-                // Local mode - your existing settings
-                opts.addArguments("--start-maximized");
-                System.out.println("🖥️ Local Mode: Standard settings");
+                System.out.println("Running in windowed mode (IntelliJ)");
             }
-            
-            // Common settings for both modes
-            opts.addArguments("--lang=en-US");
-            opts.addArguments("--window-size=1920,1080");
-            opts.addArguments("--disable-blink-features=AutomationControlled");
 
-            // Browser preferences
+            // 1 = allow geolocation, 2 = block, 0 = ask
             Map<String, Object> prefs = new HashMap<>();
             prefs.put("profile.default_content_setting_values.geolocation", 1);
             prefs.put("profile.block_third_party_cookies", false);
             opts.setExperimentalOption("prefs", prefs);
 
-            // Soften automation fingerprint
+            // Soften automation fingerprint a bit
             opts.setExperimentalOption("excludeSwitches", java.util.List.of("enable-automation"));
             opts.setExperimentalOption("useAutomationExtension", false);
 
             driver = new ChromeDriver(opts);
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         }
         return driver;
         /*if (driver == null){

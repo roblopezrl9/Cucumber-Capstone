@@ -136,22 +136,22 @@ jobs:
           mkdir -p mcp-results
           
           # Run tests through TestRunner class with MCP-selected strategy
-          echo "🔧 MCP: Configuring TestRunner for natural execution..."
+          echo "🔧 MCP: Configuring TestRunner to run exactly like IntelliJ..."
           echo "📋 Selected tests: ${{ needs.mcp-test-analysis.outputs.selected-tests }}"
-          echo "💡 MCP: Running tests naturally like your terminal"
+          echo "💡 MCP: Your original code + minimal CI headless mode"
           echo "🎯 Primary Target: runner.TestRunner (full package name)"
           echo "🎯 Fallback 1: TestRunner (simple class name)"
           echo "🎯 Fallback 2: mvn test (all tests if TestRunner fails)"
-          echo "🎯 Command: mvn test -Dtest=runner.TestRunner (natural execution)"
+          echo "🎯 Command: mvn test -Dtest=runner.TestRunner + CI_HEADLESS=true"
           
-          # Show natural execution setup
-          echo "🔍 MCP: Natural execution like your terminal environment..."
-          echo "💡 Chrome: Headless with terminal-like behavior"
-          echo "💡 Maven: Standard execution (no parallel processing)"  
+          # Show execution setup
+          echo "🔍 MCP: Using your exact IntelliJ code with CI headless mode..."
+          echo "💡 Code: Your original WebDriverManager + step definitions (unchanged)"
+          echo "💡 Chrome: Only headless mode added for CI (via CI_HEADLESS env var)"
+          echo "💡 Maven: Running TestRunner exactly like IntelliJ"  
           echo "💡 Reports: Complete output like your local runs"
-          echo "💡 Timing: Natural pace, no artificial time limits"
           echo ""
-          echo "📋 All scenarios will execute naturally:"
+          echo "📋 All scenarios will execute:"
           echo "  ✅ searching for a product (@T1)"
           echo "  ✅ adding product to cart (@T1)" 
           echo "  ✅ checking product is in cart page (@T1)"
@@ -160,7 +160,7 @@ jobs:
           echo "  ✅ Password Validations - 3 examples (@L3)"
           echo "  ✅ Register Staples user (@L9)"
           echo "  ✅ Phone format test (@L10)"
-          echo "🎯 Goal: Same behavior as your terminal/IntelliJ"
+          echo "🎯 Goal: Same behavior as IntelliJ, just headless for GitHub"
           
           # Verify TestRunner is accessible before execution
           echo "🔍 Verifying TestRunner class accessibility..."
@@ -175,7 +175,10 @@ jobs:
           # Run all tests through TestRunner class (natural execution like terminal)
           echo "🚀 Starting Maven test execution (natural pace)..."
           
-          # Run with natural settings like your terminal
+          # Set environment variable to enable headless mode for CI only
+          export CI_HEADLESS=true
+          
+          # Run tests exactly like your IntelliJ but with CI headless mode
           mvn clean test \
             -Dtest=runner.TestRunner \
             -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" \
@@ -192,12 +195,14 @@ jobs:
             echo "⚠️ Primary approach failed, trying alternative methods (natural execution)..."
             
             # Alternative 1: Try without package name
-            echo "🔄 Trying: mvn test -Dtest=TestRunner (natural execution)"
+            echo "🔄 Trying: mvn test -Dtest=TestRunner (with CI headless mode)"
+            export CI_HEADLESS=true
             mvn test -Dtest=TestRunner -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
             
             # Alternative 2: Try running all tests if TestRunner still fails
             if [ ! -f "mcp-results/cucumber.json" ]; then
-              echo "🔄 Trying: mvn test (natural execution - run all tests)"
+              echo "🔄 Trying: mvn test (run all tests with CI headless mode)"
+              export CI_HEADLESS=true
               mvn test -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
             fi
           fi
