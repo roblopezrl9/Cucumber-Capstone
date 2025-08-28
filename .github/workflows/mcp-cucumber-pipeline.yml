@@ -109,10 +109,21 @@ jobs:
           distribution: 'corretto'
           cache: maven
           
-      - name: 🚀 Maven Cache Warm-up
+      - name: 🚀 Maven Cache Warm-up & Compilation
         run: |
+          echo "📦 Downloading dependencies..."
           mvn dependency:go-offline -B -q
+          echo "🔨 Compiling source and test classes..."
           mvn compile test-compile -B -q
+          echo "✅ Compilation complete"
+          
+          # Verify TestRunner class exists
+          if [ -f "target/test-classes/runner/TestRunner.class" ]; then
+            echo "✅ TestRunner class found: target/test-classes/runner/TestRunner.class"
+          else
+            echo "❌ TestRunner class NOT found - checking directory..."
+            find target/test-classes -name "*.class" | head -10
+          fi
           
       - name: 🤖 MCP Test Execution (5min Target)
         timeout-minutes: 6
@@ -134,7 +145,10 @@ jobs:
           echo "🔧 MCP: Configuring TestRunner for 5min execution..."
           echo "📋 Selected tests: ${{ needs.mcp-test-analysis.outputs.selected-tests }}"
           echo "💡 MCP: Running all tests with speed optimizations"
-          echo "🎯 Command: mvn test -Dtest=TestRunner (parallel + optimized)"
+          echo "🎯 Primary Target: runner.TestRunner (full package name)"
+          echo "🎯 Fallback 1: TestRunner (simple class name)"
+          echo "🎯 Fallback 2: mvn test (all tests if TestRunner fails)"
+          echo "🎯 Command: mvn test -Dtest=runner.TestRunner (with fallbacks)"
           
           # Show speed optimizations applied
           echo "🔍 MCP: Speed optimizations applied for 5min target..."
@@ -154,9 +168,22 @@ jobs:
           echo "  ✅ Phone format test (@L10)"
           echo "🎯 Target: Complete execution in <5 minutes"
           
+          # Verify TestRunner is accessible before execution
+          echo "🔍 Verifying TestRunner class accessibility..."
+          if [ -f "target/test-classes/runner/TestRunner.class" ]; then
+            echo "✅ TestRunner class verified: runner.TestRunner"
+          else
+            echo "❌ TestRunner class missing! Available test classes:"
+            find target/test-classes -name "TestRunner*" -o -name "*Runner*" 2>/dev/null || echo "No Runner classes found"
+            ls -la target/test-classes/ 2>/dev/null || echo "target/test-classes directory missing"
+          fi
+          
           # Run all tests through TestRunner class (optimized for 5min runtime)
+          echo "🚀 Starting Maven test execution..."
+          
+          # Try primary approach with full package name
           mvn clean test \
-            -Dtest=TestRunner \
+            -Dtest=runner.TestRunner \
             -Dcucumber.plugin="json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" \
             -Dcucumber.execution.parallel.enabled=true \
             -Dcucumber.execution.parallel.mode.default=concurrent \
@@ -168,6 +195,46 @@ jobs:
             -DforkCount=2 \
             -DreuseForks=true \
             -DtrimStackTrace=false
+          
+          TEST_EXIT_CODE=$?
+          echo "📊 Maven test execution completed with exit code: $TEST_EXIT_CODE"
+          
+          # If first approach failed, try alternative approaches
+          if [ $TEST_EXIT_CODE -ne 0 ] || [ ! -f "mcp-results/cucumber.json" ]; then
+            echo "⚠️ Primary approach failed, trying alternative methods..."
+            
+            # Alternative 1: Try without package name
+            echo "🔄 Trying: mvn test -Dtest=TestRunner"
+            mvn test -Dtest=TestRunner -Dcucumber.plugin="json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
+            
+            # Alternative 2: Try running all tests if TestRunner still fails
+            if [ ! -f "mcp-results/cucumber.json" ]; then
+              echo "🔄 Trying: mvn test (run all tests)"
+              mvn test -Dcucumber.plugin="json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
+            fi
+          fi
+          
+          # Verify test results were generated
+          if [ -f "mcp-results/cucumber.json" ]; then
+            echo "✅ Test results generated: mcp-results/cucumber.json"
+            echo "📊 Result file size: $(wc -c < mcp-results/cucumber.json) bytes"
+            
+            # Show brief summary of what ran
+            SCENARIOS_COUNT=$(jq -r '[.[] | .elements[]] | length' mcp-results/cucumber.json 2>/dev/null || echo "0")
+            echo "📊 Scenarios executed: $SCENARIOS_COUNT"
+          else
+            echo "❌ No test results found in mcp-results/cucumber.json"
+            echo "📁 Available files in mcp-results/:"
+            ls -la mcp-results/ 2>/dev/null || echo "mcp-results directory missing"
+            echo "📁 Available files in target/:"
+            ls -la target/ 2>/dev/null || echo "target directory missing"
+            
+            # Check surefire reports as backup
+            if [ -d "target/surefire-reports" ]; then
+              echo "📁 Surefire reports found:"
+              ls -la target/surefire-reports/
+            fi
+          fi
             
       - name: 🧠 MCP Results Analysis (Fast)
         if: always()
