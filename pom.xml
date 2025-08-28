@@ -50,6 +50,7 @@
         </dependency>
 
 
+<<<<<<< HEAD
         <!-- Playwright -->
         <dependency>
             <groupId>com.microsoft.playwright</groupId>
@@ -69,6 +70,8 @@
             <version>2.15.2</version>
         </dependency>
 
+=======
+>>>>>>> c3cf49ccadfcd748bdefc4d01c03ff95aac1c06e
     </dependencies>
 
     <build>
