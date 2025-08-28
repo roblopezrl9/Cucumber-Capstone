@@ -118,13 +118,12 @@ jobs:
           echo "🔧 MCP: Configuring TestRunner for selected strategy..."
           echo "📋 Selected tests: ${{ needs.mcp-test-analysis.outputs.selected-tests }}"
           
-          # Run tests through TestRunner class
+          # Run tests through TestRunner class (plugins configured in TestRunner)
           mvn clean test \
             -Dtest=TestRunner \
             -Dmcp.strategy="${{ needs.mcp-test-analysis.outputs.test-strategy }}" \
             -Dmcp.risk="${{ needs.mcp-test-analysis.outputs.risk-level }}" \
             -Dmcp.tags="${{ needs.mcp-test-analysis.outputs.selected-tests }}" \
-            -Dcucumber.plugin="json:mcp-results/cucumber.json,html:mcp-results/cucumber-html,junit:mcp-results/junit.xml" \
             -Dmaven.test.failure.ignore=true
             
       - name: 🧠 MCP Results Analysis
