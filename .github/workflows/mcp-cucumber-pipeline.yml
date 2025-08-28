@@ -92,6 +92,10 @@ jobs:
     name: 🥒 MCP-Enhanced Cucumber Tests
     runs-on: ubuntu-latest
     needs: mcp-test-analysis
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     
     steps:
       - name: 📥 Checkout Code
