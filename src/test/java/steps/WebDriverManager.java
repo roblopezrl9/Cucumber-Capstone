@@ -19,7 +19,24 @@ public class WebDriverManager {
     public static WebDriver getDriver(){
         if (driver == null){
             ChromeOptions opts = new ChromeOptions();
-            opts.addArguments("--start-maximized", "--lang=en-US");
+            
+            // Detect CI/CD environment (GitHub Actions)
+            boolean isCI = System.getenv("CI") != null || System.getenv("GITHUB_ACTIONS") != null;
+            
+            if (isCI) {
+                // Headless mode for CI/CD
+                opts.addArguments("--headless=new");
+                opts.addArguments("--no-sandbox");
+                opts.addArguments("--disable-dev-shm-usage");
+                opts.addArguments("--disable-gpu");
+                System.out.println("🚀 Running in CI/CD mode (headless)");
+            } else {
+                // Windowed mode for local testing
+                opts.addArguments("--start-maximized");
+                System.out.println("🖥️ Running in local mode (windowed)");
+            }
+            
+            opts.addArguments("--lang=en-US");
 
             // 1 = allow geolocation, 2 = block, 0 = ask
             Map<String, Object> prefs = new HashMap<>();
@@ -34,13 +51,20 @@ public class WebDriverManager {
             driver = new ChromeDriver(opts);
 
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
-            devTools = ((ChromiumDriver) driver).getDevTools();
-            devTools.createSession();
-
-
-            //Hide webdriver flag (won't bypass CAPTCHAs; just reduces false positives)
-            ((org.openqa.selenium.JavascriptExecutor)driver)
-                    .executeScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+            
+            // Initialize DevTools only in local mode (can cause issues in CI headless)
+            if (!isCI) {
+                try {
+                    devTools = ((ChromiumDriver) driver).getDevTools();
+                    devTools.createSession();
+                    
+                    //Hide webdriver flag (won't bypass CAPTCHAs; just reduces false positives)
+                    ((org.openqa.selenium.JavascriptExecutor)driver)
+                            .executeScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+                } catch (Exception e) {
+                    System.out.println("⚠️ DevTools initialization failed: " + e.getMessage());
+                }
+            }
 
         }
         return driver;
