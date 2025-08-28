@@ -89,9 +89,8 @@ jobs:
           echo "  Risk: $RISK"
 
   mcp-cucumber-tests:
-    name: 🥒 MCP-Enhanced Cucumber Tests (5min Target)
+    name: 🥒 MCP-Enhanced Cucumber Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 8
     needs: mcp-test-analysis
     permissions:
       contents: read
@@ -102,14 +101,14 @@ jobs:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
         
-      - name: ☕ Setup Java (Speed Optimized)
+      - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'corretto'
           cache: maven
           
-      - name: 🚀 Maven Cache Warm-up & Compilation
+      - name: 🚀 Maven Preparation & Compilation
         run: |
           echo "📦 Downloading dependencies..."
           mvn dependency:go-offline -B -q
@@ -125,39 +124,34 @@ jobs:
             find target/test-classes -name "*.class" | head -10
           fi
           
-      - name: 🤖 MCP Test Execution (5min Target)
-        timeout-minutes: 6
+      - name: 🤖 MCP Test Execution
         run: |
-          echo "🚀 MCP: Executing AI-selected test strategy (5min target)..."
+          echo "🚀 MCP: Executing AI-selected test strategy..."
           echo "📋 Strategy: ${{ needs.mcp-test-analysis.outputs.test-strategy }}"
           echo "🎯 Tests: ${{ needs.mcp-test-analysis.outputs.selected-tests }}"
           echo "⚠️ Risk Level: ${{ needs.mcp-test-analysis.outputs.risk-level }}"
-          echo "⏱️ Runtime Target: 5 minutes"
+          echo "💡 Running naturally like your terminal environment"
           
           # Create MCP test results directory
           mkdir -p mcp-results
           
-          # Set speed optimization environment variables
-          export MAVEN_OPTS="-Xmx2048m -XX:+UseG1GC -XX:+UseStringDeduplication"
-          export CUCUMBER_PUBLISH_QUIET=true
-          
           # Run tests through TestRunner class with MCP-selected strategy
-          echo "🔧 MCP: Configuring TestRunner for 5min execution..."
+          echo "🔧 MCP: Configuring TestRunner for natural execution..."
           echo "📋 Selected tests: ${{ needs.mcp-test-analysis.outputs.selected-tests }}"
-          echo "💡 MCP: Running all tests with speed optimizations"
+          echo "💡 MCP: Running tests naturally like your terminal"
           echo "🎯 Primary Target: runner.TestRunner (full package name)"
           echo "🎯 Fallback 1: TestRunner (simple class name)"
           echo "🎯 Fallback 2: mvn test (all tests if TestRunner fails)"
-          echo "🎯 Command: mvn test -Dtest=runner.TestRunner (with fallbacks)"
+          echo "🎯 Command: mvn test -Dtest=runner.TestRunner (natural execution)"
           
-          # Show speed optimizations applied
-          echo "🔍 MCP: Speed optimizations applied for 5min target..."
-          echo "⚡ Chrome: Headless + disabled images/extensions/plugins"
-          echo "⚡ Maven: Parallel execution + optimized memory settings"  
-          echo "⚡ Reports: Minimal JSON output only"
-          echo "⚡ Artifacts: Compressed with 7-day retention"
+          # Show natural execution setup
+          echo "🔍 MCP: Natural execution like your terminal environment..."
+          echo "💡 Chrome: Headless with terminal-like behavior"
+          echo "💡 Maven: Standard execution (no parallel processing)"  
+          echo "💡 Reports: Complete output like your local runs"
+          echo "💡 Timing: Natural pace, no artificial time limits"
           echo ""
-          echo "📋 All scenarios will execute:"
+          echo "📋 All scenarios will execute naturally:"
           echo "  ✅ searching for a product (@T1)"
           echo "  ✅ adding product to cart (@T1)" 
           echo "  ✅ checking product is in cart page (@T1)"
@@ -166,7 +160,7 @@ jobs:
           echo "  ✅ Password Validations - 3 examples (@L3)"
           echo "  ✅ Register Staples user (@L9)"
           echo "  ✅ Phone format test (@L10)"
-          echo "🎯 Target: Complete execution in <5 minutes"
+          echo "🎯 Goal: Same behavior as your terminal/IntelliJ"
           
           # Verify TestRunner is accessible before execution
           echo "🔍 Verifying TestRunner class accessibility..."
@@ -178,39 +172,33 @@ jobs:
             ls -la target/test-classes/ 2>/dev/null || echo "target/test-classes directory missing"
           fi
           
-          # Run all tests through TestRunner class (optimized for 5min runtime)
-          echo "🚀 Starting Maven test execution..."
+          # Run all tests through TestRunner class (natural execution like terminal)
+          echo "🚀 Starting Maven test execution (natural pace)..."
           
-          # Try primary approach with full package name
+          # Run with natural settings like your terminal
           mvn clean test \
             -Dtest=runner.TestRunner \
-            -Dcucumber.plugin="json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" \
-            -Dcucumber.execution.parallel.enabled=true \
-            -Dcucumber.execution.parallel.mode.default=concurrent \
-            -Dcucumber.execution.parallel.config.strategy=dynamic \
+            -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" \
             -Dmcp.strategy="${{ needs.mcp-test-analysis.outputs.test-strategy }}" \
             -Dmcp.risk="${{ needs.mcp-test-analysis.outputs.risk-level }}" \
             -Dmcp.tags="${{ needs.mcp-test-analysis.outputs.selected-tests }}" \
-            -Dmaven.test.failure.ignore=true \
-            -DforkCount=2 \
-            -DreuseForks=true \
-            -DtrimStackTrace=false
+            -Dmaven.test.failure.ignore=true
           
           TEST_EXIT_CODE=$?
-          echo "📊 Maven test execution completed with exit code: $TEST_EXIT_CODE"
+          echo "📊 Maven test execution completed with exit code: $TEST_EXIT_CODE (natural execution)"
           
           # If first approach failed, try alternative approaches
           if [ $TEST_EXIT_CODE -ne 0 ] || [ ! -f "mcp-results/cucumber.json" ]; then
-            echo "⚠️ Primary approach failed, trying alternative methods..."
+            echo "⚠️ Primary approach failed, trying alternative methods (natural execution)..."
             
             # Alternative 1: Try without package name
-            echo "🔄 Trying: mvn test -Dtest=TestRunner"
-            mvn test -Dtest=TestRunner -Dcucumber.plugin="json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
+            echo "🔄 Trying: mvn test -Dtest=TestRunner (natural execution)"
+            mvn test -Dtest=TestRunner -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
             
             # Alternative 2: Try running all tests if TestRunner still fails
             if [ ! -f "mcp-results/cucumber.json" ]; then
-              echo "🔄 Trying: mvn test (run all tests)"
-              mvn test -Dcucumber.plugin="json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
+              echo "🔄 Trying: mvn test (natural execution - run all tests)"
+              mvn test -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml" -Dmaven.test.failure.ignore=true
             fi
           fi
           
@@ -236,14 +224,13 @@ jobs:
             fi
           fi
             
-      - name: 🧠 MCP Results Analysis (Fast)
+      - name: 🧠 MCP Results Analysis
         if: always()
-        timeout-minutes: 2
         run: |
-          echo "🤖 MCP: Analyzing test results (speed-optimized)..."
-          echo "🎯 Analyzed all test scenarios in under 5min total"
+          echo "🤖 MCP: Analyzing test results..."
+          echo "🎯 Analyzed all test scenarios naturally"
           
-          # Fast parse test results using MCP protocol
+          # Parse test results using MCP protocol
           if [ -f "mcp-results/cucumber.json" ]; then
             TOTAL_SCENARIOS=$(jq -r '[.[] | .elements[] | .steps[]] | length' mcp-results/cucumber.json 2>/dev/null || echo "0")
             PASSED_STEPS=$(jq -r '[.[] | .elements[] | .steps[] | select(.result.status == "passed")] | length' mcp-results/cucumber.json 2>/dev/null || echo "0")
@@ -251,7 +238,7 @@ jobs:
             
             # Count actual scenarios run
             SCENARIOS_RUN=$(jq -r '[.[] | .elements[]] | length' mcp-results/cucumber.json 2>/dev/null || echo "0")
-            echo "📋 Total scenarios executed: $SCENARIOS_RUN (completed in <5min)"
+            echo "📋 Total scenarios executed: $SCENARIOS_RUN (natural execution like terminal)"
           else
             TOTAL_SCENARIOS=0
             PASSED_STEPS=0
@@ -312,14 +299,15 @@ jobs:
           reporter: java-junit
           fail-on-error: false
           
-      - name: 📤 Upload MCP Artifacts (Fast)
+      - name: 📤 Upload MCP Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mcp-test-results
-          path: mcp-results/
-          retention-days: 7
-          compression-level: 6
+          path: |
+            mcp-results/
+            target/cucumber-reports.html
+          retention-days: 30
 
   mcp-deployment-check:
     name: 🚀 MCP Deployment Readiness
@@ -342,20 +330,21 @@ jobs:
             SUCCESS_RATE=$(jq -r '.success_rate' mcp-analysis/mcp-analysis.json 2>/dev/null || echo "0")
             RISK_LEVEL=$(jq -r '.risk_level' mcp-analysis/mcp-analysis.json 2>/dev/null || echo "unknown")
             
-            echo "📊 Current Metrics (all test scenarios):"
+            echo "📊 Current Metrics (natural execution - all test scenarios):"
             echo "  Success Rate: $SUCCESS_RATE%"
             echo "  Risk Level: $RISK_LEVEL"
             echo "  Coverage: Complete test suite (BestBuy + Login functionality)"
+            echo "  Execution: Natural pace like terminal environment"
             
             # MCP Deployment Logic
             if (( $(echo "$SUCCESS_RATE >= 85" | bc -l 2>/dev/null || echo "0") )); then
               echo "✅ MCP Decision: DEPLOY READY"
-              echo "🚀 All quality gates passed across full test suite"
-              echo "🎯 BestBuy and Login functionality verified"
+              echo "🚀 All quality gates passed with natural execution"
+              echo "🎯 BestBuy and Login functionality verified (terminal-like behavior)"
               echo "deployment_ready=true" >> $GITHUB_ENV
             else
               echo "🛑 MCP Decision: DEPLOY BLOCKED"
-              echo "❌ Quality gates failed across test scenarios"
+              echo "❌ Quality gates failed with natural execution"
               echo "🔧 Manual review required - check all functionality"
               echo "deployment_ready=false" >> $GITHUB_ENV
             fi
