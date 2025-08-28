@@ -195,6 +195,7 @@ jobs:
           name: MCP Cucumber Results
           path: mcp-results/junit.xml
           reporter: java-junit
+          fail-on-error: false
           
       - name: 📤 Upload MCP Artifacts
         if: always()

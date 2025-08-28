@@ -24,29 +24,51 @@ public class WebDriverManager {
             boolean isCI = System.getenv("CI") != null || System.getenv("GITHUB_ACTIONS") != null;
             
             if (isCI) {
-                // Headless mode for CI/CD with window-like behavior
+                // Headless mode for CI/CD - make it behave EXACTLY like windowed mode
                 opts.addArguments("--headless=new");
                 opts.addArguments("--no-sandbox");
                 opts.addArguments("--disable-dev-shm-usage");
                 opts.addArguments("--disable-gpu");
-                // Make headless mode behave more like windowed mode
+                
+                // Window behavior - exact same as your IntelliJ
                 opts.addArguments("--window-size=1920,1080");
+                opts.addArguments("--start-maximized");
+                
+                // JavaScript and rendering - same as windowed
                 opts.addArguments("--disable-web-security");
                 opts.addArguments("--allow-running-insecure-content");
                 opts.addArguments("--disable-features=VizDisplayCompositor");
-                System.out.println("🚀 Running in CI/CD mode (headless with window-like behavior)");
+                opts.addArguments("--enable-javascript");
+                opts.addArguments("--disable-background-timer-throttling");
+                opts.addArguments("--disable-renderer-backgrounding");
+                opts.addArguments("--disable-backgrounding-occluded-windows");
+                
+                // Modal and popup behavior - same as windowed
+                opts.addArguments("--disable-popup-blocking");
+                opts.addArguments("--disable-default-apps");
+                opts.addArguments("--disable-translate");
+                
+                // Performance - same as windowed
+                opts.addArguments("--memory-pressure-off");
+                opts.addArguments("--max_old_space_size=4096");
+                
+                System.out.println("🚀 Running in CI/CD mode (headless configured to match IntelliJ behavior)");
             } else {
-                // Windowed mode for local testing
+                // Windowed mode for local testing (your working IntelliJ setup)
                 opts.addArguments("--start-maximized");
-                System.out.println("🖥️ Running in local mode (windowed)");
+                System.out.println("🖥️ Running in local mode (windowed - IntelliJ setup)");
             }
             
             opts.addArguments("--lang=en-US");
 
-            // 1 = allow geolocation, 2 = block, 0 = ask
+            // Browser preferences - make CI behave exactly like your IntelliJ
             Map<String, Object> prefs = new HashMap<>();
             prefs.put("profile.default_content_setting_values.geolocation", 1);
             prefs.put("profile.block_third_party_cookies", false);
+            prefs.put("profile.default_content_setting_values.popups", 1); // Allow popups (like your IntelliJ)
+            prefs.put("profile.default_content_setting_values.notifications", 1); // Allow notifications
+            prefs.put("profile.managed_default_content_settings.images", 1); // Load images
+            prefs.put("profile.default_content_settings.popups", 0); // Allow popups
             opts.setExperimentalOption("prefs", prefs);
 
             // Soften automation fingerprint a bit
