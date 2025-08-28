@@ -151,7 +151,7 @@ public class BestBuyLoginSteps {
         String actualTitle = driver.getTitle();
         Assert.assertEquals(actualTitle, expectedTitle);
         System.out.println("Successfully navigated to my account page: " + actualTitle);
-        driver.quit();
+        WebDriverManager.closeDriver();
     }
 
 
@@ -180,9 +180,7 @@ public class BestBuyLoginSteps {
 
     @After
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        WebDriverManager.closeDriver();
     }
 
     private void typeSlowly(By locator, String text) {

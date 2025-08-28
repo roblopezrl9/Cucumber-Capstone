@@ -197,6 +197,6 @@ public class BestBuySteps {
     @Then("I close the browser")
     public void i_close_the_browser() {
         // Write code here that turns the phrase above into concrete actions
-        driver.quit();
+        WebDriverManager.closeDriver();
     }
 }
