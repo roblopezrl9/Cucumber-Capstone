@@ -9,9 +9,6 @@ Feature: User operations on BestBuy
     And I can enter all of my account information
     Then I should be navigated to my account page
 
-
-
-
   @L3
   Scenario Outline: Password Validations
     Given  start with the BestBuy home page
