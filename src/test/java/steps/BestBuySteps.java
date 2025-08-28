@@ -80,189 +80,66 @@ public class BestBuySteps {
         String searchResult = driver.findElement(By.cssSelector("#promo-title")).getText();
         Assert.assertTrue(searchResult.contains("macbook pro"), "Search result does not contain 'macbook pro'");
 
-
     }
+
+
     @When("I click the “Add to Cart” button next to the laptop")
     public void i_click_the_add_to_cart_button_next_to_the_laptop() {
-        // Extended timing to match your IntelliJ experience  
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        // Write code here that turns the phrase above into concrete actions
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        
-        // Wait for page to be fully loaded (like IntelliJ)
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {}
-        
-        System.out.println("🔍 Looking for MacBook with Add to Cart button (IntelliJ-style)...");
         WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
                 "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
-        System.out.println("✅ Found MacBook: " + macBook.getText().substring(0, Math.min(100, macBook.getText().length())) + "...");
-        
-        // Find and prepare the Add to Cart button (same as IntelliJ)
+        System.out.println(macBook.getText());
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"))));
-        
-        // Scroll into view (exactly like IntelliJ behavior)
-        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", button);
-        
-        // Wait for any animations to complete
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {}
-        
-        // Click with retry logic (robust like your local setup)
-        boolean clicked = false;
-        for (int attempt = 1; attempt <= 3 && !clicked; attempt++) {
-            try {
-                System.out.println("🖱️ Attempt " + attempt + ": Clicking Add to Cart button...");
-                button.click();
-                clicked = true;
-                System.out.println("✅ Add to Cart clicked successfully!");
-                
-            } catch (StaleElementReferenceException e) {
-                System.out.println("⚠️ Stale element - re-finding button (attempt " + attempt + ")");
-                // Re-find elements like IntelliJ would handle
-                macBook = driver.findElement(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
-                        "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]"));
-                button = macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"));
-                js.executeScript("arguments[0].click();", button);
-                clicked = true;
-                System.out.println("✅ Add to Cart clicked via JavaScript!");
-                
-            } catch (Exception e) {
-                System.out.println("⚠️ Click attempt " + attempt + " failed: " + e.getMessage());
-                if (attempt < 3) {
-                    try { Thread.sleep(1000); } catch (InterruptedException ie) {}
-                }
-            }
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", button );
+
+        try{
+            button.click();
+
         }
-        
-        if (!clicked) {
-            throw new RuntimeException("Add to Cart button click failed after 3 attempts");
+        catch (StaleElementReferenceException e){
+            System.out.println("Stale element reference exception caught");
+            js.executeScript("arguments[0].click();", button);
         }
     }
+
     @Then("I should see a modal window with the cart subtotal")
     public void i_should_see_a_modal_window_with_the_cart_subtotal() {
-        // Extended wait to match your IntelliJ timing
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         System.out.println("I should see a modal window with the cart subtotal");
-        
-        // First, wait for page to be ready (like in your IntelliJ)
-        try {
-            Thread.sleep(3000); // Allow modal animation to complete
-        } catch (InterruptedException e) {}
-        
-        // Wait for any modal/overlay to appear (exactly like IntelliJ behavior)
-        WebElement cartSubtotal = null;
-        try {
-            // Primary method - same as your IntelliJ
-            cartSubtotal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-subtotal")));
-            System.out.println("✅ Found cart-subtotal using primary method (IntelliJ-style)");
-        } catch (Exception e) {
-            System.out.println("⚠️ Primary method failed, trying alternative approach...");
-            
-            // Alternative - wait for any modal content to load
-            try {
-                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@role='dialog' or @class='modal' or contains(@class, 'modal')]")));
-                cartSubtotal = driver.findElement(By.xpath("//*[contains(text(), 'Cart Subtotal') or contains(text(), 'Subtotal') or contains(text(), '$')]"));
-                System.out.println("✅ Found cart subtotal using alternative method");
-            } catch (Exception e2) {
-                System.out.println("ℹ️ Modal detected but cart subtotal text verification skipped (CI-compatible)");
-                return; // Continue test flow
-            }
-        }
-        
-        // Verify content if element found
-        if (cartSubtotal != null) {
-            String actualText = cartSubtotal.getText();
-            String expectedText = "Cart Subtotal";
-            boolean isValid = actualText.contains(expectedText) || actualText.contains("Subtotal") || actualText.contains("$");
-            
-            if (isValid) {
-                System.out.println("✅ Cart subtotal verified: " + actualText);
-            } else {
-                System.out.println("ℹ️ Cart subtotal text differs but modal functionality working: " + actualText);
-            }
-            // Always pass - focus on functionality working like IntelliJ
-        }
+        // wait for the cart subtotal to be visible
+        WebElement cartSubtotal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-subtotal")));
+        String actualText = cartSubtotal.getText();
+        String expectedText = "Cart Subtotal";
+        Assert.assertTrue(actualText.contains(expectedText), "Cart subtotal does not contain expected text: " + expectedText);
     }
+
 
     // GO TO MODAL PAGE
     @Given("I am on the Best Buy modal page")
     public void i_am_on_the_best_buy_modal_page() {
+        // Write code here that turns the phrase above into concrete actions
         System.out.println("I am in the Best Buy Modal page");
-        
-        // Wait for modal to appear (like IntelliJ timing)
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        try {
-            Thread.sleep(2000); // Allow modal to fully render
-        } catch (InterruptedException e) {}
-        
-        // Try to detect modal exactly like your IntelliJ setup
-        try {
-            WebElement addedToCartElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("added-to-cart")));
-            String modalText = addedToCartElement.getText();
-            System.out.println("✅ Found modal with IntelliJ-style detection: " + modalText);
-            Assert.assertEquals(modalText, "Added to cart", "Modal text matches expected");
-            
-        } catch (Exception e) {
-            System.out.println("⚠️ Primary modal detection failed, trying alternative methods...");
-            
-            // Alternative detection - wait for any modal/overlay
-            try {
-                wait.until(ExpectedConditions.or(
-                    ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Added to cart')]")),
-                    ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@role='dialog']")),
-                    ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@class, 'modal')]"))
-                ));
-                
-                WebElement modal = driver.findElement(By.xpath("//*[contains(text(), 'Added') or contains(text(), 'cart') or contains(text(), 'Cart')]"));
-                System.out.println("✅ Found modal element: " + modal.getText());
-                
-            } catch (Exception e2) {
-                System.out.println("ℹ️ Modal detection varied from IntelliJ but add to cart flow working");
-                // Don't fail - focus on functionality working like IntelliJ
-            }
-        }
+        String modalText = driver.findElement(By.className("added-to-cart")).getText();
+        Assert.assertEquals(modalText, "Added to cart", "Modal text does not match expected text");
     }
 
     @When("I click on go to cart")
     public void i_click_on_go_to_cart() {
         try{
             Thread.sleep(5000);
-            
-            // Try multiple selectors for "Go to Cart" button
-            WebElement goToCart = null;
-            try {
-                goToCart = driver.findElement(By.xpath("//*[@id='recs-interruptor-drawer-overlay-backdrop']/div/div[3]/div/div/div/div[2]"));
-            } catch (Exception e1) {
-                try {
-                    // Alternative selectors for go to cart button
-                    goToCart = driver.findElement(By.xpath("//*[contains(text(), 'Go to Cart') or contains(text(), 'View Cart') or contains(text(), 'Cart')]"));
-                } catch (Exception e2) {
-                    // Final fallback - direct navigation to cart
-                    System.out.println("⚠️ Go to Cart button not found, navigating directly to cart page");
-                    driver.get("https://www.bestbuy.com/cart");
-                    Thread.sleep(3000);
-                    return;
-                }
-            }
-            
-            if (goToCart != null) {
-                goToCart.click();
-                Thread.sleep(2000);
-            }
+            WebElement goToCart = driver.findElement(By.xpath("//*[@id='recs-interruptor-drawer-overlay-backdrop']/div/div[3]/div/div/div/div[2]"));
+            goToCart.click();
 
         }catch (Exception e){
-            System.out.println("⚠️ Go to cart failed, trying direct navigation");
-            driver.get("https://www.bestbuy.com/cart");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ie) {}
+            e.printStackTrace();
         }
     }
 
     @Then("I navigate to the laptop and the order summary")
     public void i_navigate_to_the_laptop_and_the_order_summary() {
+        // Verify we are on the cart page and print the total amount
         String expUrl = "https://www.bestbuy.com/cart";
         String actUrl = driver.getCurrentUrl();
         WebElement amountSummary = driver.findElement(By.xpath("//tr[.//span[text()='Total']]/td[starts-with(normalize-space(.), '$')]"));
@@ -272,11 +149,10 @@ public class BestBuySteps {
 
 
 
-
-    // THE REMOVE ITEM FROM CART
+    // Scenario: Remove item from cart
     @Given("I am on the Best Buy Cart page")
     public void i_am_on_the_best_buy_cart_page() {
-        // Write code here that turns the phrase above into concrete actions
+        // Below code checks if we are on the cart page
         System.out.println("I am on the Best Buy Cart page");
         String cartUrl = "https://www.bestbuy.com/cart";
         String actualUrl = driver.getCurrentUrl();
@@ -285,63 +161,34 @@ public class BestBuySteps {
 
     @When("I remove an item from the cart")
     public void i_remove_an_item_from_the_cart() {
+        // Write code here that turns the phrase above into concrete actions
         System.out.println("REMOVE ITEM FROM CART ");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // Wait for the cart to be clickable and click it
         try {
-            System.out.println("🛒 Current URL: " + driver.getCurrentUrl());
-            
-            // Try multiple selectors for remove button - ALL with proper selector types
-            WebElement removeButton = null;
-            
-            // Method 1: Try CSS selector
-            try {
-                removeButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.cart-item__remove")));
-                System.out.println("✅ Found remove button with CSS selector");
-            } catch (Exception e1) {
-                System.out.println("⚠️ CSS selector failed, trying XPath...");
-                
-                // Method 2: Try XPath with class-based approach
-                try {
-                    removeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'remove')]")));
-                    System.out.println("✅ Found remove button with XPath (class)");
-                } catch (Exception e2) {
-                    System.out.println("⚠️ XPath class-based failed, trying text-based...");
-                    
-                    // Method 3: Try XPath with text-based approach
-                    try {
-                        removeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Remove')]")));
-                        System.out.println("✅ Found remove button with XPath (text)");
-                    } catch (Exception e3) {
-                        System.out.println("⚠️ All remove button selectors failed - skipping remove step");
-                        return; // Gracefully skip this step
-                    }
-                }
-            }
-            
-            // Click the button if found
-            if (removeButton != null) {
-                removeButton.click();
-                Thread.sleep(2000); // Wait for removal animation
-                System.out.println("✅ Remove button clicked successfully");
-            }
-            
+            driver.getCurrentUrl();
+            WebElement cart = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.cssSelector("span.cart-label"))
+            );
+            cart.click();
+            WebElement removeButton = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.cssSelector("button.cart-item__remove"))
+            );
+            removeButton.click();
         } catch (Exception e) {
-            System.out.println("⚠️ Remove item operation failed: " + e.getMessage());
-            System.out.println("✅ Continuing with test (graceful handling for CI/different cart structures)");
-            // NO RuntimeException thrown - graceful continuation
+            throw new RuntimeException("Cart is not clickable: " + e.getMessage());
         }
+
     }
 
 
     @Then("I verify that the item is removed from the cart")
     public void i_verify_that_the_item_is_removed_from_the_cart() {
         // Write code here that turns the phrase above into concrete actions
-
-        // h1 class="heading-5 page-heading__title" what shoudl show
-        // Your cart is empty
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // Wait for the cart to update and show "Your cart is empty" message
         Boolean emptyCartMessage = wait.until(ExpectedConditions.textToBe(
                 By.cssSelector("h1.heading-5.page-heading__title"),
                 "Your cart is empty"
@@ -349,6 +196,8 @@ public class BestBuySteps {
 
         Assert.assertTrue(emptyCartMessage, "The message does not match. The cart is not empty.");
     }
+
+
 
     @Then("I close the browser")
     public void i_close_the_browser() {
