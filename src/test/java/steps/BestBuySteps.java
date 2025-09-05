@@ -149,7 +149,6 @@ public class BestBuySteps {
     }
 
 
-
     // Scenario: Remove item from cart
     @Given("I am on the Best Buy Cart page")
     public void i_am_on_the_best_buy_cart_page() {
@@ -167,12 +166,6 @@ public class BestBuySteps {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         // Wait for the cart to be clickable and click it
         try {
-            driver.getCurrentUrl();
-            // Click on the cart icon to view cart items
-            WebElement cart = wait.until(
-                    ExpectedConditions.elementToBeClickable(By.cssSelector("span.cart-label"))
-            );
-            cart.click();
             // Wait for the remove button to be clickable and click it
             WebElement removeButton = wait.until(
                     ExpectedConditions.elementToBeClickable(By.cssSelector("button.cart-item__remove"))
@@ -196,11 +189,5 @@ public class BestBuySteps {
     }
 
 
-
-//    @Then("I close the browser")
-//    public void i_close_the_browser() {
-//        // Write code here that turns the phrase above into concrete actions
-//        driver.quit();
-//    }
 
 }

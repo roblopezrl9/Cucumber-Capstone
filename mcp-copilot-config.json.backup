@@ -1,0 +1,176 @@
+﻿{
+  "mcp": {
+    "version": "2.0",
+    "protocol": "copilot-enhanced-cicd",
+    "description": "MCP + GitHub Copilot Enhanced CI/CD Configuration"
+  },
+  
+  "copilot_integration": {
+    "enabled": true,
+    "model": "github-copilot",
+    "features": {
+      "code_generation": true,
+      "test_automation": true,
+      "deployment_scripts": true,
+      "documentation_generation": true,
+      "error_analysis": true
+    },
+    "context_prompts": {
+      "test_generation": "Generate comprehensive test scenarios for the following feature:",
+      "deployment_script": "Create a deployment script for the following environment:",
+      "error_analysis": "Analyze the following test failure and suggest fixes:",
+      "performance_optimization": "Optimize the following CI/CD pipeline for better performance:"
+    }
+  },
+  
+  "cicd_automation": {
+    "build_scripts": {
+      "maven": {
+        "clean_compile": "mvn clean compile -DskipTests",
+        "test_compile": "mvn test-compile",
+        "package": "mvn package -DskipTests",
+        "verify": "mvn verify"
+      },
+      "docker": {
+        "build": "docker build -t : .",
+        "test": "docker run --rm : mvn test",
+        "push": "docker push /:"
+      }
+    },
+    
+    "test_automation": {
+      "cucumber": {
+        "smoke": "mvn test -Dtest=TestRunner -Dcucumber.filter.tags='@smoke'",
+        "regression": "mvn test -Dtest=TestRunner -Dcucumber.filter.tags='@regression'",
+        "comprehensive": "mvn test -Dtest=TestRunner -Dcucumber.filter.tags='@T1'"
+      },
+      "parallel_execution": {
+        "enabled": true,
+        "max_workers": 4,
+        "strategy": "feature_based"
+      }
+    },
+    
+    "deployment_automation": {
+      "environments": {
+        "dev": {
+          "auto_deploy": true,
+          "approval_required": false,
+          "rollback_enabled": true
+        },
+        "staging": {
+          "auto_deploy": false,
+          "approval_required": true,
+          "rollback_enabled": true
+        },
+        "production": {
+          "auto_deploy": false,
+          "approval_required": true,
+          "rollback_enabled": true,
+          "blue_green": true
+        }
+      }
+    }
+  },
+  
+  "contexts": {
+    "copilot_test_analysis": {
+      "model": "copilot-enhanced-analyzer",
+      "confidence_threshold": 0.85,
+      "parameters": {
+        "code_change_weight": 0.4,
+        "test_history_weight": 0.3,
+        "risk_assessment_weight": 0.3,
+        "copilot_suggestions_weight": 0.2
+      }
+    },
+    
+    "copilot_test_selection": {
+      "model": "copilot-smart-selector",
+      "strategies": {
+        "comprehensive": {
+          "tags": "@regression or @T1",
+          "coverage": 0.95,
+          "max_time": 120,
+          "copilot_enhanced": true
+        },
+        "targeted": {
+          "tags": "@smoke or @regression",
+          "coverage": 0.75,
+          "max_time": 60,
+          "copilot_enhanced": true
+        },
+        "smoke": {
+          "tags": "@smoke",
+          "coverage": 0.40,
+          "max_time": 20,
+          "copilot_enhanced": true
+        },
+        "copilot_suggested": {
+          "tags": "@copilot-suggested",
+          "coverage": 0.60,
+          "max_time": 45,
+          "copilot_enhanced": true,
+          "dynamic_selection": true
+        }
+      }
+    },
+    
+    "copilot_results_analysis": {
+      "model": "copilot-results-analyzer",
+      "quality_gates": {
+        "success_rate_minimum": 85,
+        "deployment_threshold": 90,
+        "critical_failure_limit": 0,
+        "copilot_recommendations": true
+      },
+      "auto_fix_suggestions": true,
+      "performance_insights": true
+    }
+  },
+  
+  "integrations": {
+    "github_actions": {
+      "enabled": true,
+      "artifact_retention": 30,
+      "copilot_enhanced": true
+    },
+    
+    "github_copilot": {
+      "enabled": true,
+      "api_version": "2023-07-07",
+      "features": {
+        "code_completion": true,
+        "test_generation": true,
+        "documentation": true,
+        "error_explanation": true
+      }
+    },
+    
+    "cucumber_reports": {
+      "formats": ["json", "html", "junit", "copilot-enhanced"],
+      "output_dir": "mcp-results",
+      "copilot_insights": true
+    }
+  },
+  
+  "ai_features": {
+    "smart_test_selection": true,
+    "failure_prediction": true,
+    "deployment_readiness": true,
+    "automated_insights": true,
+    "copilot_code_generation": true,
+    "copilot_test_automation": true,
+    "copilot_deployment_scripts": true,
+    "copilot_error_analysis": true,
+    "copilot_performance_optimization": true
+  },
+  
+  "copilot_prompts": {
+    "test_scenario_generation": "Based on the following user story and existing test patterns, generate comprehensive test scenarios using Cucumber Gherkin syntax:",
+    "deployment_script_generation": "Create a robust deployment script for the following environment configuration:",
+    "error_analysis": "Analyze the following test failure logs and provide specific fix recommendations:",
+    "performance_optimization": "Review the following CI/CD pipeline configuration and suggest performance improvements:",
+    "security_audit": "Perform a security analysis of the following deployment configuration:"
+  }
+}
