@@ -102,6 +102,7 @@ public class BestBuySteps {
             js.executeScript("arguments[0].click();", button);
         }
     }
+
     @Then("I should see a modal window with the cart subtotal")
     public void i_should_see_a_modal_window_with_the_cart_subtotal() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
