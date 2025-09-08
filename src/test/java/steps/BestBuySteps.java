@@ -80,8 +80,8 @@ public class BestBuySteps {
         String searchResult = driver.findElement(By.cssSelector("#promo-title")).getText();
         Assert.assertTrue(searchResult.contains("macbook pro"), "Search result does not contain 'macbook pro'");
 
-    }
 
+    }
     @When("I click the “Add to Cart” button next to the laptop")
     public void i_click_the_add_to_cart_button_next_to_the_laptop() {
         // Write code here that turns the phrase above into concrete actions
@@ -102,7 +102,6 @@ public class BestBuySteps {
             js.executeScript("arguments[0].click();", button);
         }
     }
-
     @Then("I should see a modal window with the cart subtotal")
     public void i_should_see_a_modal_window_with_the_cart_subtotal() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -113,7 +112,6 @@ public class BestBuySteps {
         String expectedText = "Cart Subtotal";
         Assert.assertTrue(actualText.contains(expectedText), "Cart subtotal does not contain expected text: " + expectedText);
     }
-
 
     // Scenario: checking product is in the cart page
     @Given("I am on the Best Buy modal page")
