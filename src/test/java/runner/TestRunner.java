@@ -11,13 +11,13 @@ import org.junit.runner.RunWith;
         glue = "steps",
         plugin = {"pretty", "html:target/cucumber-reports.html"},
 //        tags = "@T1",
-        monochrome = true,
+        monochrome = true
         //tags = "@P21" // Uncomment to run specific tags
 //        tags = "@L1" //Login Functionality
-        tags = "@L1" //Login Functionality
+//        tags = "@L1" //Login Functionality
 
         //tags = "@P22" //Product Search Function
-        tags="@L9" //Login with Data-Driven
+//        tags="@L9" //Login with Data-Driven
         //tags="@L1"
 
 //        tags="not @L1 and not @L3" //Login with Data-Driven
