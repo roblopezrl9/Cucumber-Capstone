@@ -26,11 +26,13 @@ public class BestBuyLoginSteps {
                     "button[aria-label*='Accept' i], button[aria-label*='Allow all' i]"
     );
 
-   //@Before
+
+    //Step to launch the browser
     @Given("start with the BestBuy home page")
     public void startWithTheBestBuyHomePage() throws InterruptedException {
         driver.get("https://www.bestbuy.com/");
-        //Thread.sleep(5000);
+        Thread.sleep(5000);
+
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         List<WebElement> banners = driver.findElements(cookieBanner);
@@ -52,15 +54,15 @@ public class BestBuyLoginSteps {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
 
     }
-
+// Step to click on Account button
     @Then("I click on Account button")
     public void i_click_on_account_button() throws InterruptedException {
         // Wait for the Account button to be clickable
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement accountButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[@class='v-p-right-xxs line-clamp']")));
+        WebElement accountButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//span[@class='v-p-right-xxs line-clamp']")));
         accountButton.click();
-        //Thread.sleep(2000);
-        //driver.findElement(By.xpath("//span[@class='v-p-right-xxs line-clamp']")).click();
+
     }
 
     @Then("I see the panel with Create account button")
@@ -69,24 +71,24 @@ public class BestBuyLoginSteps {
         // create account button is displayed: Create Account
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Create Account']")));
-        //Assert.assertTrue(driver.findElement(By.xpath("//a[text()='Create Account']")).isDisplayed());
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[text()='Create Account']")));
+        Assert.assertTrue(driver.findElement(
+                By.xpath("//a[text()='Create Account']")).isDisplayed());
     }
 
     @When("I click on the Create Account button")
     public void i_click_on_the_create_account_button() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Create Account']")));
-        //element.click();
-        driver.get("https://www.bestbuy.com/createaccount");
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//a[text()='Create Account']")));
+        element.click();
 
     }
-
     @Then("I should be navigated to Create Account page")
     public void i_should_be_navigated_to_create_account_page() throws InterruptedException {
         String expected = "Best Buy: Create an Account";
-        // Wait for the page to load and title to be set
-        //driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+
         // Get the actual title of the page
         String actualUrl = driver.getTitle();
         Assert.assertEquals(actualUrl, expected);
@@ -97,7 +99,7 @@ public class BestBuyLoginSteps {
     String uniqueEmail()
     {
         String prefix = "testuser";
-        String domain = "@capestone.com";
+        String domain = "@gmail.com";
         long timestamp = System.currentTimeMillis();
         return prefix + timestamp + domain;
     }

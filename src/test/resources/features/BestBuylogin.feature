@@ -21,11 +21,13 @@ Feature: User operations on BestBuy
       Then I should be navigated to Create Account page
       When I enter <password> it should check for password validations <Valid>
 
-      Examples:
+    @UC-105 @Positive Examples:
         | password     | Valid |
         |  "QEA@team2" | "true" |
         | "JohnDoe$23" |"true"  |
-        | "john"       |"false" |
+     @UC-106 @Negative Examples:
+        |   password     | Valid  |
+        |   "john"       | "false"|
 
 
   @L4
@@ -76,7 +78,7 @@ Feature: User operations on BestBuy
     And I click the Register button
     Then I should see the message "Your registration completed"
 
-    @L9
+   @UC-107 @Positive @L9
     Scenario: Successfully register a new Staples user
       Given I navigate to the Staples account creation page
       When I enter a unique email
@@ -88,7 +90,7 @@ Feature: User operations on BestBuy
       And I click the Create Account button of staples
       Then I should see a confirmation message or be redirected to My Account
 
-      @L10
+     @UC-108 @Negative @L10
       Scenario: Negative Test - Incorrect phone number format on Staples
         Given I navigate to the Staples account creation page
         When I enter a unique email

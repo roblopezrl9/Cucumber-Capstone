@@ -15,7 +15,7 @@ public class StaplesRegisterSteps {
     public void goToCreateAccountPage() throws InterruptedException {
 
         driver.get("https://www.staples.com/idm/com/createaccount");
-        Thread.sleep(10000);
+        Thread.sleep(20000);
         handleIFrames();
 
     }
