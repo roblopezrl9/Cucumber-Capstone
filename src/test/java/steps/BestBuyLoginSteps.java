@@ -1,13 +1,10 @@
 package steps;
 
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.After;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -28,6 +25,7 @@ public class BestBuyLoginSteps {
 
 
     //Step to launch the browser
+
     @Given("start with the BestBuy home page")
     public void startWithTheBestBuyHomePage() throws InterruptedException {
         driver.get("https://www.bestbuy.com/");
@@ -80,6 +78,7 @@ public class BestBuyLoginSteps {
     @When("I click on the Create Account button")
     public void i_click_on_the_create_account_button() throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+      
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//a[text()='Create Account']")));
         element.click();
@@ -111,15 +110,15 @@ public class BestBuyLoginSteps {
             WebElement firstName = driver.findElement(By.id("firstName"));
             firstName.clear();
             //firstName.sendKeys("SamJ");
-            typeSlowly(By.id("firstName"),"Kevin");
+            typeSlowly(By.id("firstName"),"SteveM");
             WebElement lastName = driver.findElement(By.xpath("//input[@name='lastName']"));
             //lastName.sendKeys("Johnson");
-            typeSlowly(By.xpath("//input[@name='lastName']"),"Tal");
+            typeSlowly(By.xpath("//input[@name='lastName']"),"LeeS");
             WebElement emailAddress = driver.findElement(By.xpath("//input[@id='email']"));
             //automate the email address input
             emailAddress.clear();
             //emailAddress.sendKeys("Priya468Tar@gmail.com");
-            typeSlowly(By.xpath("//input[@id='email']"),"kevintamalas@gmail.com");
+            typeSlowly(By.xpath("//input[@id='email']"),"StevemLees@yahoo.com");
             WebElement password = driver.findElement(By.id("fld-p1"));
             //password.sendKeys("Test@123@Test12456");
             typeSlowly(By.id("fld-p1"),"Plus01Min$1234568");
@@ -131,7 +130,7 @@ public class BestBuyLoginSteps {
             Thread.sleep(1000);
             WebElement mobileNo = driver.findElement(By.xpath("//input[@name='phone']"));
             //mobileNo.sendKeys("2122457212");
-            typeSlowly(By.xpath("//input[@name='phone']"),"7321212121");
+            typeSlowly(By.xpath("//input[@name='phone']"),"7017321878");
             Thread.sleep(2000);
             WebElement useForAccountRecovery = driver.findElement(By.xpath("//input[@name='isRecoveryPhone']"));
             useForAccountRecovery.click();
@@ -159,14 +158,13 @@ public class BestBuyLoginSteps {
     }
 
 
-// Testing Positive and Negative password validations
+
     @When("I enter {string} it should check for password validations {string}")
     public void i_enter_it_should_check_for_password_validations(String password, String valid) {
-       WebElement passwordText =driver.findElement(By.id("fld-p1"));
-       passwordText.sendKeys(password);
-       passwordText.sendKeys(Keys.TAB);
-        List<WebElement> passwordElement = driver.findElements(By.xpath
-                ("//p[text()='Please enter a strong password.']"));
+       WebElement passwordtextfield =driver.findElement(By.id("fld-p1"));
+       passwordtextfield.sendKeys(password);
+       passwordtextfield.sendKeys(Keys.TAB);
+        List<WebElement> passwordElement = driver.findElements(By.xpath("//p[text()='Please enter a strong password.']"));
 
         if(valid.equals("true")){
             System.out.println("Valid = true " + passwordElement.isEmpty());
@@ -175,9 +173,10 @@ public class BestBuyLoginSteps {
         else {
             System.out.println("Valid = false " + passwordElement.isEmpty());
             Assert.assertTrue(passwordElement.getFirst().isDisplayed());
-
+            //Assert.assertFalse(passwordElement.isEmpty());
         }
 
+       // driver.quit();
     }
 
 
@@ -200,8 +199,6 @@ public class BestBuyLoginSteps {
             }
         }
     }
-
-// Create new user for Carter site
 
 
     }

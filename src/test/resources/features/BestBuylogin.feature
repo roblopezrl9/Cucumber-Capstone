@@ -1,6 +1,16 @@
 Feature: User operations on BestBuy
-  @L1
-  Scenario: Creating a new user
+#  @L1
+#  Scenario: Creating a new user
+#    Given  start with the BestBuy home page
+#    Then I click on Account button
+#    And  I see the panel with Create account button
+#    When I click on the Create Account button
+#    Then I should be navigated to Create Account page
+#    And I can enter all of my account information
+#    Then I should be navigated to my account page
+
+  @L3
+  Scenario Outline: Password Validations
     Given  start with the BestBuy home page
     Then I click on Account button
     And  I see the panel with Create account button
@@ -82,6 +92,7 @@ Feature: User operations on BestBuy
     And I click the Register button
     Then I should see the message "Your registration completed"
 
+
     @UC-107 @Positive @L9
     Scenario: Successfully register a new Staples user
       Given I navigate to the Staples account creation page
@@ -103,5 +114,8 @@ Feature: User operations on BestBuy
         And I enter "1111111111" into the Phone Number field
         Then I should see a incorrect phone number format error message
 
+    @T2
+    Scenario: Clean up
+      Then I close the browser
 
 

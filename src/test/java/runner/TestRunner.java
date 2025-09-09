@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "steps",
+
         plugin = {"pretty",
                 "html:target/cucumber-reports.html",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
@@ -18,7 +19,6 @@ import org.junit.runner.RunWith;
         tags="@L3 or @Positive or @Negative" //Login Functionality with Positive and Negative Scenarios
         //tags ="@Positive"
         //tags="@L1"
-
 )
 public class TestRunner {
 
