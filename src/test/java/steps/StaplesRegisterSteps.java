@@ -15,7 +15,7 @@ public class StaplesRegisterSteps {
     public void goToCreateAccountPage() throws InterruptedException {
 
         driver.get("https://www.staples.com/idm/com/createaccount");
-        Thread.sleep(10000);
+        Thread.sleep(20000);
         handleIFrames();
 
     }
@@ -72,6 +72,7 @@ public class StaplesRegisterSteps {
     public void clickCreateAccount() throws InterruptedException {
         driver.findElement(By.id("submitIdmCreateForm")).click();
         Thread.sleep(10000);
+
     }
 
     @Then("I should see a confirmation message or be redirected to My Account")
