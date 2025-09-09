@@ -2,10 +2,6 @@
 
 on:
   push:
-    branches: 
-      - main
-      - develop
-      - '**'  # Triggers on ANY other branch name too
     branches-ignore:
       - 'gh-pages'
       - 'dependabot/**'
