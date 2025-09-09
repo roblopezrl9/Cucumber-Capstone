@@ -1,5 +1,6 @@
 package steps;
 
+import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 public class WebDriverManager {
     public static WebDriver driver;
+
 
     public static WebDriver getDriver(){
         if (driver == null){
@@ -32,6 +34,11 @@ public class WebDriverManager {
             driver = new ChromeDriver(opts);
         }
         return driver;
+        /*if (driver == null){
+            driver = new ChromeDriver();
+            driver.manage().window().maximize();
+        }
+        return driver;*/
     }
 
 

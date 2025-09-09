@@ -12,6 +12,7 @@ Feature: User operations on BestBuy
 
 
 
+
     @L3
     Scenario Outline: Password Validations
       Given  start with the BestBuy home page
@@ -21,11 +22,14 @@ Feature: User operations on BestBuy
       Then I should be navigated to Create Account page
       When I enter <password> it should check for password validations <Valid>
 
-    @UC-105 @Positive Examples:
+      @UC-105 @Positive
+      Examples:
+
         | password     | Valid |
         |  "QEA@team2" | "true" |
         | "JohnDoe$23" |"true"  |
-     @UC-106 @Negative Examples:
+     @UC-106 @Negative
+      Examples:
         |   password     | Valid  |
         |   "john"       | "false"|
 
@@ -78,7 +82,7 @@ Feature: User operations on BestBuy
     And I click the Register button
     Then I should see the message "Your registration completed"
 
-   @UC-107 @Positive @L9
+    @UC-107 @Positive @L9
     Scenario: Successfully register a new Staples user
       Given I navigate to the Staples account creation page
       When I enter a unique email

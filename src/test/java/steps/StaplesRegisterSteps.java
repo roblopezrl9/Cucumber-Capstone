@@ -72,16 +72,16 @@ public class StaplesRegisterSteps {
     public void clickCreateAccount() throws InterruptedException {
         driver.findElement(By.id("submitIdmCreateForm")).click();
         Thread.sleep(10000);
-        driver.findElement(By.id("submitIdmCreateForm")).click();
+       // driver.findElement(By.id("submitIdmCreateForm")).click();
     }
 
     @Then("I should see a confirmation message or be redirected to My Account")
     public void verifyAccountCreated() throws InterruptedException {
-        String expectedUrl="https://www.staples.com/idm/com/createaccount";
+        String expectedUrl="https://www.staples.com/idm/com/createuserconfirm";
         String actualUrl = driver.getCurrentUrl();
         Assert.assertEquals(actualUrl, expectedUrl);
         Thread.sleep(10000);
-        driver.quit();
+        //driver.quit();
     }
 
     private void typeSlowly(By locator, String text) {
