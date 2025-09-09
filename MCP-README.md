@@ -8,9 +8,9 @@ A **simple but powerful** CI/CD pipeline that uses **Model Context Protocol (MCP
 ```bash
 git add .
 git commit -m "Add MCP pipeline"
-git push origin main
+git push origin any-branch-name  # Contributors can use ANY naming!
 ```
-Pipeline runs automatically! ✨
+Pipeline runs automatically on ANY branch! ✨
 
 ### 2. Manual Run
 1. Go to **GitHub Actions** tab

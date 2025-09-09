@@ -133,15 +133,15 @@ function Invoke-CopilotTest {
         switch ($TEST_STRATEGY) {
             "comprehensive" {
                 Write-Host "    Running comprehensive test suite..." -ForegroundColor White
-                mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
+                mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive or @Negative" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
             }
             "targeted" {
                 Write-Host "    Running targeted test suite..." -ForegroundColor White
-                mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@smoke or @regression" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
+                mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
             }
             "smoke" {
                 Write-Host "    Running smoke tests..." -ForegroundColor White
-                mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@smoke" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
+                mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@UC-101 or @UC-102" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
             }
         }
         

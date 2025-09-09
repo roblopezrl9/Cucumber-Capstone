@@ -31,7 +31,7 @@
 ### ** GitHub Actions Workflow**
 -  **Workflow Name**:  Copilot-Enhanced CI/CD Pipeline
 -  **Triggers**: 
-  - Push to: main, develop, tata-feature/*
+  - Push to: main, develop, or ANY other branch name
   - Pull requests to: main, develop
   - Manual dispatch: Available
 -  **Pipeline Modes**: smart, full, build, test, deploy

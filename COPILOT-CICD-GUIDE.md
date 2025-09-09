@@ -64,7 +64,7 @@ This project now includes a comprehensive **MCP (Model Context Protocol) + GitHu
 ```
 
 ### **3. GitHub Actions**
-- **Automatic**: Push to `main`, `develop`, or `tata-feature/*` branches
+- **Automatic**: Push to main, develop, or ANY other branch (contributors can use any naming convention)
 - **Manual**: Go to GitHub Actions  "Copilot-Enhanced CI/CD Pipeline"  "Run workflow"
 
 ##  Copilot Intelligence Features

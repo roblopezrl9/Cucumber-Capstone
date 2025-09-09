@@ -37,25 +37,26 @@
 `
 
 #### **Specific Test Strategies**
-`powershell
-# Smoke tests (fastest - ~5 min)
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @smoke"
+```powershell
+# Smoke tests (fastest - ~5 min) - Core scenarios
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@UC-101 or @UC-102"
 
-# Regression tests (medium - ~15 min)
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @regression"
+# Regression tests (medium - ~15 min) - All positive scenarios
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive"
 
-# Comprehensive tests (full - ~30 min)
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1"
+# Comprehensive tests (full - ~30 min) - All scenarios
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive or @Negative"
 
-# BestBuy specific tests
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @bestbuy"
-`
+# Login specific tests
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Login"
+```
 
 ### **GitHub Actions**
 
 #### **Automatic Triggers**
-- **Push to**: main, develop, 	ata-feature/* branches
+- **Push to**: main, develop, or ANY other branch name (feature/*, bugfix/*, contributor-name/*, etc.)
 - **Pull Request to**: main, develop branches
+- **Excluded**: gh-pages, dependabot branches
 
 #### **Manual Execution**
 1. Go to **GitHub Actions** tab
@@ -164,7 +165,7 @@ The pipeline automatically analyzes your changes:
    `ash
    git add .
    git commit -m "Complete MCP + Copilot CI/CD setup"
-   git push origin tata-feature/remove-cart-item
+   git push origin your-branch-name
    `
 
 3. **Monitor Pipeline**:

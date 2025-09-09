@@ -67,7 +67,7 @@ public class BestBuySteps {
         WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '14') and contains(., '24GB Memory') and " +
                 "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
         // assert that the laptop with the specified specs is found
-        Assert.assertTrue(macBook.getText().contains("16"));
+        Assert.assertTrue(macBook.getText().contains("14"));
         Assert.assertTrue(macBook.getText().contains("24GB Memory"));
         Assert.assertTrue(macBook.getText().contains("512GB SSD"));
 

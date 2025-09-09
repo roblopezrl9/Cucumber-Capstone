@@ -25,15 +25,15 @@ New-Item -ItemType Directory -Path "mcp-results" -Force | Out-Null
 switch ($TEST_STRATEGY) {
     "smoke" {
         Write-Host " Running smoke tests..." -ForegroundColor Yellow
-        mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@smoke" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
+        mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@UC-101 or @UC-102" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
     }
     "regression" {
         Write-Host " Running regression tests..." -ForegroundColor Yellow
-        mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@regression" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
+        mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
     }
     "comprehensive" {
         Write-Host " Running comprehensive tests..." -ForegroundColor Yellow
-        mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
+        mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive or @Negative" -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
     }
     "parallel" {
         Write-Host " Running parallel tests..." -ForegroundColor Yellow
