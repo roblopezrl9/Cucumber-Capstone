@@ -297,12 +297,6 @@ The `TestRunner.java` class is the main entry point for test execution:
    - Ensure Java 22 is installed
    - Run `mvn clean install` to refresh dependencies
 
-4. **PowerShell Command Issues (Windows)**
-   - Use single quotes around `-Dcucumber.filter.tags` parameter
-   - Correct: `mvn test '-Dcucumber.filter.tags=@Positive'`
-   - Incorrect: `mvn test -Dcucumber.filter.tags="@Positive"`
-   - If still having issues, try Command Prompt (cmd) instead of PowerShell
-
 ### **Getting Help**
 - Check the `FINAL-SETUP-GUIDE.md` for detailed setup instructions
 - Review test logs in `target/` directory
