@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
+import org.junit.Assert;
 
 import java.time.Duration;
 
@@ -78,7 +78,7 @@ public class BestBuySteps {
         // Write code here that turns the phrase above into concrete actions
         // Get the title of the search results page and verify it contains "macbook pro"
         String searchResult = driver.findElement(By.cssSelector("#promo-title")).getText();
-        Assert.assertTrue(searchResult.contains("macbook pro"), "Search result does not contain 'macbook pro'");
+        Assert.assertTrue("Search result does not contain 'macbook pro'", searchResult.contains("macbook pro"));
 
 
     }
@@ -95,11 +95,13 @@ public class BestBuySteps {
 
         try{
             button.click();
-
         }
         catch (StaleElementReferenceException e){
-            System.out.println("Stale element reference exception caught");
-            js.executeScript("arguments[0].click();", button);
+            System.out.println("Stale element reference exception caught - re-finding element");
+            // Re-find the element when stale
+            WebElement freshButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(., 'Add to cart')]")));
+            js.executeScript("arguments[0].click();", freshButton);
         }
     }
 
@@ -111,7 +113,7 @@ public class BestBuySteps {
         WebElement cartSubtotal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-subtotal")));
         String actualText = cartSubtotal.getText();
         String expectedText = "Cart Subtotal";
-        Assert.assertTrue(actualText.contains(expectedText), "Cart subtotal does not contain expected text: " + expectedText);
+        Assert.assertTrue("Cart subtotal does not contain expected text: " + expectedText, actualText.contains(expectedText));
     }
 
     // Scenario: checking product is in the cart page
@@ -120,7 +122,7 @@ public class BestBuySteps {
         // The code below checks if we are on the modal page
         System.out.println("I am in the Best Buy Modal page");
         String modalText = driver.findElement(By.className("added-to-cart")).getText();
-        Assert.assertEquals(modalText, "Added to cart", "Modal text does not match expected text");
+        Assert.assertEquals("Modal text does not match expected text", "Added to cart", modalText);
     }
 
     @When("I click on go to cart")
@@ -155,7 +157,7 @@ public class BestBuySteps {
         System.out.println("I am on the Best Buy Cart page");
         String cartUrl = "https://www.bestbuy.com/cart";
         String actualUrl = driver.getCurrentUrl();
-        Assert.assertEquals(actualUrl, cartUrl, "Not on the cart page");
+        Assert.assertEquals("Not on the cart page", cartUrl, actualUrl);
     }
 
     @When("I remove an item from the cart")
@@ -184,7 +186,7 @@ public class BestBuySteps {
                 By.cssSelector("h1.heading-5.page-heading__title"),
                 "Your cart is empty"
         ));
-        Assert.assertTrue(emptyCartMessage, "The message does not match. The cart is not empty.");
+        Assert.assertTrue("The message does not match. The cart is not empty.", emptyCartMessage);
     }
 
 
