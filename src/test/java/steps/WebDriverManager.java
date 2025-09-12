@@ -15,11 +15,33 @@ public class WebDriverManager {
         if (driver == null){
             //io.github.bonigarcia.wdm.WebDriverManager.chromedriver().setup();
             ChromeOptions opts = new ChromeOptions();
-            opts.addArguments("--start-maximized", "--lang=en-US");
-            opts.addArguments("window-size=1920, 1080");
+            
+            // Check if running in CI environment (GitHub Actions, Jenkins, etc.)
+            boolean isCI = System.getenv("CI") != null || 
+                          System.getenv("GITHUB_ACTIONS") != null ||
+                          System.getenv("JENKINS_URL") != null ||
+                          System.getProperty("java.awt.headless") != null;
+            
+            if (isCI) {
+                // CI/Headless configuration
+                opts.addArguments("--headless=new");
+                opts.addArguments("--no-sandbox");
+                opts.addArguments("--disable-dev-shm-usage");
+                opts.addArguments("--disable-gpu");
+                opts.addArguments("--disable-extensions");
+                opts.addArguments("--remote-debugging-port=9222");
+                opts.addArguments("--window-size=1920,1080");
+                System.out.println("🤖 Running in CI mode - Headless Chrome enabled");
+            } else {
+                // Local development configuration
+                opts.addArguments("--start-maximized");
+                opts.addArguments("window-size=1920, 1080");
+                System.out.println("🖥️ Running in local mode - GUI Chrome enabled");
+            }
+            
+            // Common arguments for both environments
+            opts.addArguments("--lang=en-US");
             opts.addArguments("--disable-blink-features=AutomationControlled");
-
-            //opts.addArguments("--headless");
 
             // 1 = allow geolocation, 2 = block, 0 = ask
             Map<String, Object> prefs = new HashMap<>();
