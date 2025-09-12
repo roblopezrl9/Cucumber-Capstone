@@ -8,9 +8,9 @@ A **simple but powerful** CI/CD pipeline that uses **Model Context Protocol (MCP
 ```bash
 git add .
 git commit -m "Add MCP pipeline"
-git push origin main
+git push origin any-branch-name  # Contributors can use ANY naming!
 ```
-Pipeline runs automatically! ✨
+Pipeline runs automatically on ANY branch! ✨
 
 ### 2. Manual Run
 1. Go to **GitHub Actions** tab
@@ -52,10 +52,11 @@ Pipeline runs automatically! ✨
 ```
 📦 Your Project
 ├── .github/workflows/
-│   └── mcp-cucumber-pipeline.yml    # 🤖 Main pipeline
-├── mcp-config.json                  # ⚙️ MCP settings  
-├── mcp-ai-agent.java               # 🧠 AI agent (optional)
-└── MCP-README.md                   # 📚 This file
+│   └── copilot-enhanced-pipeline.yml    # 🤖 Main CI/CD pipeline
+├── src/test/java/
+│   ├── runner/TestRunner.java           # 🎯 Test execution
+│   └── steps/                           # 📝 Active step definitions
+└── src/test/resources/features/         # 🥒 Cucumber features
 ```
 
 ## 🎯 MCP Features
@@ -68,7 +69,7 @@ Pipeline runs automatically! ✨
 - 🎯 **Risk-based testing** strategies
 
 ### **🎛️ Configuration**
-Edit `mcp-config.json` to customize:
+The pipeline automatically configures itself based on your test structure:
 
 ```json
 {
@@ -128,7 +129,7 @@ graph LR
 
 ## 🤖 Using the MCP AI Agent (Optional)
 
-The `mcp-ai-agent.java` can be used for local analysis:
+The GitHub Actions workflow provides intelligent analysis:
 
 ```java
 // Analyze repository changes

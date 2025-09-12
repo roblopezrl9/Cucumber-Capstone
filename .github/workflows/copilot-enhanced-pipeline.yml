@@ -2,7 +2,9 @@
 
 on:
   push:
-    branches: [ main, develop, 'tata-feature/*' ]
+    branches-ignore:
+      - 'gh-pages'
+      - 'dependabot/**'
   pull_request:
     branches: [ main, develop ]
   workflow_dispatch:
@@ -61,17 +63,26 @@ jobs:
           
           # Analyze changed files
           if [ "${{ github.event_name }}" == "push" ]; then
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || echo "")
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -E '\.(java|feature|xml|properties)$' || echo "")
           else
-            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD || echo "")
+            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD 2>/dev/null | grep -E '\.(java|feature|xml|properties)$' || echo "")
           fi
+          
+          # Filter out deleted files and only show existing ones
+          EXISTING_FILES=""
+          for file in $CHANGED_FILES; do
+            if [ -f "$file" ]; then
+              EXISTING_FILES="$EXISTING_FILES $file"
+            fi
+          done
+          CHANGED_FILES="$EXISTING_FILES"
           
           echo "📁 Changed files: $CHANGED_FILES"
           
           # Copilot-enhanced analysis
-          TEST_IMPACT="medium"
+          TEST_IMPACT="low"
           DEPLOYMENT_RISK="low"
-          STRATEGY="regression"
+          STRATEGY="smoke"
           ACTIONS="build,test"
           
           # Feature file changes - high impact
@@ -80,20 +91,31 @@ jobs:
             STRATEGY="comprehensive"
             ACTIONS="build,test,deploy"
             echo "🎯 Copilot: Feature changes detected - comprehensive testing required"
-          fi
-          
           # Test file changes - medium impact
-          if echo "$CHANGED_FILES" | grep -q "TestRunner\|Steps\.java"; then
+          elif echo "$CHANGED_FILES" | grep -q "TestRunner\|Steps\.java"; then
             TEST_IMPACT="medium"
             STRATEGY="regression"
+            ACTIONS="build,test"
             echo "🎯 Copilot: Test changes detected - regression validation required"
-          fi
-          
           # Build configuration changes - medium risk
-          if echo "$CHANGED_FILES" | grep -q "pom\.xml\|build\.gradle"; then
+          elif echo "$CHANGED_FILES" | grep -q "pom\.xml\|build\.gradle"; then
+            TEST_IMPACT="medium"
             DEPLOYMENT_RISK="medium"
+            STRATEGY="regression"
             ACTIONS="build,test,deploy"
-            echo "🎯 Copilot: Build changes detected - increased deployment risk"
+            echo "🎯 Copilot: Build changes detected - regression testing with increased deployment risk"
+          # Documentation or minor changes - low impact
+          elif echo "$CHANGED_FILES" | grep -q "\.md$\|\.txt$\|\.yml$"; then
+            TEST_IMPACT="low"
+            STRATEGY="smoke"
+            ACTIONS="build,test"
+            echo "🎯 Copilot: Minor changes detected - smoke testing sufficient"
+          # Default for other changes
+          else
+            TEST_IMPACT="medium"
+            STRATEGY="regression"
+            ACTIONS="build,test"
+            echo "🎯 Copilot: Standard changes detected - regression testing recommended"
           fi
           
           # Production deployment - high risk
@@ -175,22 +197,22 @@ jobs:
           case $STRATEGY in
             "comprehensive")
               echo " Running comprehensive test suite..."
-              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1" \
+              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive or @Negative" \
                 -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
               ;;
             "regression")
               echo " Running regression test suite..."
-              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @regression" \
+              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive" \
                 -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
               ;;
             "smoke")
               echo " Running smoke tests..."
-              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @smoke" \
+              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@UC-101 or @UC-102" \
                 -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
               ;;
             *)
               echo " Running default test suite..."
-              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1" \
+              mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive" \
                 -Dcucumber.plugin="pretty,html:target/cucumber-reports.html,json:mcp-results/cucumber.json,junit:mcp-results/junit.xml"
               ;;
           esac
