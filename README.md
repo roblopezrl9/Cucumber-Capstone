@@ -41,6 +41,9 @@ This is a comprehensive **Cucumber BDD Testing Framework** developed as a capsto
 
 3. **Run Tests**
    ```bash
+   # Clean Run
+   mvn clean test
+   
    # Run all tests
    mvn test
    
