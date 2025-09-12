@@ -64,10 +64,10 @@ public class BestBuySteps {
         System.out.println("one of the laptops listed should be 14 8GB Memory and 256GB SSD");
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         // wait for the laptop with the specified specs to be visible
-        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '14') and contains(., '24GB Memory') and " +
                 "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
         // assert that the laptop with the specified specs is found
-        Assert.assertTrue(macBook.getText().contains("16"));
+        Assert.assertTrue(macBook.getText().contains("14"));
         Assert.assertTrue(macBook.getText().contains("24GB Memory"));
         Assert.assertTrue(macBook.getText().contains("512GB SSD"));
 
@@ -87,7 +87,7 @@ public class BestBuySteps {
         // Write code here that turns the phrase above into concrete actions
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '16') and contains(., '24GB Memory') and " +
+        WebElement macBook = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class = 'sku-block'][contains(., '14') and contains(., '24GB Memory') and " +
                 "contains(., '512GB SSD') and .//button[contains(., 'Add to cart')]]")));
         System.out.println(macBook.getText());
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(macBook.findElement(By.xpath(".//button[contains(., 'Add to cart')]"))));

@@ -31,31 +31,34 @@
 ### **Local Development**
 
 #### **Smart Pipeline (Recommended)**
-`powershell
-# Run the intelligent orchestrator
-.\scripts\copilot-automation\copilot-cicd-orchestrator.ps1 -Pipeline smart
-`
+```bash
+# Push to trigger intelligent GitHub Actions pipeline
+git add .
+git commit -m "Your changes"
+git push origin your-branch-name
+```
 
 #### **Specific Test Strategies**
-`powershell
-# Smoke tests (fastest - ~5 min)
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @smoke"
+```powershell
+# Smoke tests (fastest - ~5 min) - Core scenarios
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@UC-101 or @UC-102"
 
-# Regression tests (medium - ~15 min)
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @regression"
+# Regression tests (medium - ~15 min) - All positive scenarios
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive"
 
-# Comprehensive tests (full - ~30 min)
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1"
+# Comprehensive tests (full - ~30 min) - All scenarios
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive or @Negative"
 
-# BestBuy specific tests
-mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@T1 and @bestbuy"
-`
+# Login specific tests
+mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Login"
+```
 
 ### **GitHub Actions**
 
 #### **Automatic Triggers**
-- **Push to**: main, develop, 	ata-feature/* branches
+- **Push to**: main, develop, or ANY other branch name (feature/*, bugfix/*, contributor-name/*, etc.)
 - **Pull Request to**: main, develop branches
+- **Excluded**: gh-pages, dependabot branches
 
 #### **Manual Execution**
 1. Go to **GitHub Actions** tab
@@ -126,15 +129,12 @@ The pipeline automatically analyzes your changes:
 
 ##  **Configuration Files**
 
-### **MCP Configuration**
-- mcp-config.json - Basic MCP settings
-- mcp-copilot-config-enhanced.json - Advanced Copilot integration
+### **Test Configuration**
+- src/test/resources/extent.properties - Test reporting configuration
+- pom.xml - Maven dependencies and build configuration
 
-### **Automation Scripts**
-- scripts/copilot-automation/copilot-cicd-orchestrator.ps1 - Main orchestrator
-- scripts/copilot-automation/copilot-build.ps1 - Build automation
-- scripts/copilot-automation/copilot-test.ps1 - Test automation
-- scripts/copilot-automation/copilot-deploy.ps1 - Deployment automation
+### **GitHub Actions Workflow**
+- .github/workflows/copilot-enhanced-pipeline.yml - Main CI/CD pipeline with intelligent analysis
 
 ##  **Benefits You Get**
 
@@ -164,7 +164,7 @@ The pipeline automatically analyzes your changes:
    `ash
    git add .
    git commit -m "Complete MCP + Copilot CI/CD setup"
-   git push origin tata-feature/remove-cart-item
+   git push origin your-branch-name
    `
 
 3. **Monitor Pipeline**:
