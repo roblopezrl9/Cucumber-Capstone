@@ -40,7 +40,12 @@ This is a comprehensive **Cucumber BDD Testing Framework** developed as a capsto
    ```
 
 3. **Run Tests**
+   
+   **For Linux/Mac (Bash):**
    ```bash
+   # Clean and run all tests (recommended)
+   mvn clean test
+   
    # Run all tests
    mvn test
    
@@ -53,6 +58,25 @@ This is a comprehensive **Cucumber BDD Testing Framework** developed as a capsto
    
    # Run with TestRunner and specific tags
    mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Positive"
+   ```
+   
+   **For Windows (PowerShell):**
+   ```powershell
+   # Clean and run all tests (recommended)
+   mvn clean test
+   
+   # Run all tests
+   mvn test
+   
+   # Run tests using TestRunner class directly
+   mvn test -Dtest=TestRunner
+   
+   # Run specific test scenarios (note the single quotes)
+   mvn test '-Dcucumber.filter.tags=@Positive'
+   mvn test '-Dcucumber.filter.tags=@UC-101 or @UC-102'
+   
+   # Run with TestRunner and specific tags
+   mvn test -Dtest=TestRunner '-Dcucumber.filter.tags=@Positive'
    ```
 
 ---
@@ -165,8 +189,19 @@ This is a comprehensive **Cucumber BDD Testing Framework** developed as a capsto
 
 ## 🚀 Running Tests
 
-### **Local Execution**
+### **Basic Maven Commands**
 
+```bash
+# Clean build and run all tests (recommended for fresh execution)
+mvn clean test
+
+# Run all tests (uses existing compiled classes)
+mvn test
+```
+
+### **Advanced Local Execution**
+
+**For Linux/Mac (Bash):**
 ```bash
 # Run all tests with TestRunner
 mvn test -Dtest=TestRunner
@@ -185,6 +220,27 @@ mvn test -Dtest=TestRunner -Dcucumber.filter.tags="@Login"
 
 # Alternative: Run without specifying TestRunner (Maven will find it automatically)
 mvn test -Dcucumber.filter.tags="@Positive"
+```
+
+**For Windows (PowerShell):**
+```powershell
+# Run all tests with TestRunner
+mvn test -Dtest=TestRunner
+
+# Quick smoke tests (fastest)
+mvn test -Dtest=TestRunner '-Dcucumber.filter.tags=@UC-101 or @UC-102'
+
+# Comprehensive testing (all positive scenarios)
+mvn test -Dtest=TestRunner '-Dcucumber.filter.tags=@Positive'
+
+# Full regression testing
+mvn test -Dtest=TestRunner '-Dcucumber.filter.tags=@Positive or @Negative'
+
+# Specific feature testing
+mvn test -Dtest=TestRunner '-Dcucumber.filter.tags=@Login'
+
+# Alternative: Run without specifying TestRunner (Maven will find it automatically)
+mvn test '-Dcucumber.filter.tags=@Positive'
 ```
 
 ### **GitHub Actions (Automatic)**
@@ -240,6 +296,12 @@ The `TestRunner.java` class is the main entry point for test execution:
 3. **Build Issues**
    - Ensure Java 22 is installed
    - Run `mvn clean install` to refresh dependencies
+
+4. **PowerShell Command Issues (Windows)**
+   - Use single quotes around `-Dcucumber.filter.tags` parameter
+   - Correct: `mvn test '-Dcucumber.filter.tags=@Positive'`
+   - Incorrect: `mvn test -Dcucumber.filter.tags="@Positive"`
+   - If still having issues, try Command Prompt (cmd) instead of PowerShell
 
 ### **Getting Help**
 - Check the `FINAL-SETUP-GUIDE.md` for detailed setup instructions
