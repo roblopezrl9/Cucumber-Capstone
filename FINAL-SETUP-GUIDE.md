@@ -31,10 +31,12 @@
 ### **Local Development**
 
 #### **Smart Pipeline (Recommended)**
-`powershell
-# Run the intelligent orchestrator
-.\scripts\copilot-automation\copilot-cicd-orchestrator.ps1 -Pipeline smart
-`
+```bash
+# Push to trigger intelligent GitHub Actions pipeline
+git add .
+git commit -m "Your changes"
+git push origin your-branch-name
+```
 
 #### **Specific Test Strategies**
 ```powershell
@@ -127,15 +129,12 @@ The pipeline automatically analyzes your changes:
 
 ##  **Configuration Files**
 
-### **MCP Configuration**
-- mcp-config.json - Basic MCP settings
-- mcp-copilot-config-enhanced.json - Advanced Copilot integration
+### **Test Configuration**
+- src/test/resources/extent.properties - Test reporting configuration
+- pom.xml - Maven dependencies and build configuration
 
-### **Automation Scripts**
-- scripts/copilot-automation/copilot-cicd-orchestrator.ps1 - Main orchestrator
-- scripts/copilot-automation/copilot-build.ps1 - Build automation
-- scripts/copilot-automation/copilot-test.ps1 - Test automation
-- scripts/copilot-automation/copilot-deploy.ps1 - Deployment automation
+### **GitHub Actions Workflow**
+- .github/workflows/copilot-enhanced-pipeline.yml - Main CI/CD pipeline with intelligent analysis
 
 ##  **Benefits You Get**
 

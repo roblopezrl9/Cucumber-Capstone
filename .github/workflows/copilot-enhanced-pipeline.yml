@@ -63,10 +63,19 @@ jobs:
           
           # Analyze changed files
           if [ "${{ github.event_name }}" == "push" ]; then
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || echo "")
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -E '\.(java|feature|xml|properties)$' || echo "")
           else
-            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD || echo "")
+            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }} HEAD 2>/dev/null | grep -E '\.(java|feature|xml|properties)$' || echo "")
           fi
+          
+          # Filter out deleted files and only show existing ones
+          EXISTING_FILES=""
+          for file in $CHANGED_FILES; do
+            if [ -f "$file" ]; then
+              EXISTING_FILES="$EXISTING_FILES $file"
+            fi
+          done
+          CHANGED_FILES="$EXISTING_FILES"
           
           echo "📁 Changed files: $CHANGED_FILES"
           
